@@ -5,16 +5,18 @@ import pygame
 import constants as c
 import random
 
+from texts_manager import TextsManager
+
+
 class Server:
     class Room:
-        STATE_CREATED = 0
+        STATE_LOBBY = 0
         STATE_SELECTING_TEXT = 1
-        STATE_HIDING = 2
-        STATE_SEEKING = 3
-        STATE_REVIEW = 4
+        STATE_PLAYING = 2
+        STATE_REVIEW = 3
 
         def __init__(self, join_code):
-            self.state = self.STATE_CREATED
+            self.state = self.STATE_LOBBY
             self.join_code = join_code
             self.clients = []
             self.selected_words = {}
@@ -25,6 +27,7 @@ class Server:
             self.clear_word_state()
             self.clients.append(self.clients.pop(0))
             self.seeker = self.clients[0]
+            print(f"ROUND START! NEW SEEKER: {self.clients[0]}")
 
         def on_game_start(self):
             self.clear_word_state()
@@ -82,6 +85,7 @@ class Server:
         self.main()
 
     def main(self):
+        TextsManager.init()
         while True:
             packets = self.servo.get()
 
@@ -136,10 +140,11 @@ class Server:
         if packet.get("type") == "start_game":
             if len(room.clients) < 2:
                 self.send_to_all_clients_in_room(room_code, Packet(type="start_game_fail"))
-            elif room.state == Server.Room.STATE_CREATED:
-                room.state = Server.Room.STATE_HIDING # TODO go to selection first
+            elif room.state == Server.Room.STATE_LOBBY:
+                room.state = Server.Room.STATE_PLAYING # TODO go to selection first
                 room.on_game_start()
                 room.on_round_start()
+                self.send_to_all_clients_in_room(room_code, Packet(type="category_options", texts=TextsManager.get_random_keys_no_overlap(3), seeker=room.seeker))
                 self.send_to_all_clients_in_room(room_code, Packet(type="start_game", seeker=room.seeker))
         if packet.get("type") == "leave_room":
             self.handle_disconnect(client)
@@ -151,7 +156,7 @@ class Server:
                                                         value=packet.get("value"),
                                                         client_id=client))
                 if room.all_players_locked_in():
-                    self.send_to_all_clients_in_room(room_code, Packet(type="all_locked_in"))
+                    self.send_all_players_locked_in(room_code)
             else:
                 client.send_packet(type="lock_in_word_fail")
         if packet.get("type") == "select_word":
@@ -166,7 +171,29 @@ class Server:
         if packet.get("type") == "hiding_timeout":
             room.time_out_client(client)
             self.send_to_all_clients_in_room_but(room_code, Packet(type="hiding_timeout", client=client), client)
+            if room.all_players_locked_in():
+                self.send_all_players_locked_in(room_code)
+        if packet.get("type") == "seeker_guess":
+            self.send_to_all_clients_in_room_but(room_code, Packet(type="seeker_guess", word=packet.get("word")), client)
+        if packet.get("type") == "seek_over":
+            room.state = Server.Room.STATE_REVIEW
+            self.send_to_all_clients_in_room_but(room_code, Packet(type="seek_over"), client)
+        if packet.get("type") == "review_over":
+            if room.state != Server.Room.STATE_SELECTING_TEXT:
+                room.state = Server.Room.STATE_SELECTING_TEXT
+                room.on_round_start()
+                self.send_to_all_clients_in_room(room_code, Packet(type="category_options",
+                                                                   texts=TextsManager.get_random_keys_no_overlap(3),
+                                                                   seeker=room.seeker))
+        if packet.get("type") == "seeker_hover":
+            self.send_to_all_clients_in_room_but(room_code, Packet(type="seeker_hover", word=packet.get("word")), client)
+        if packet.get("type") == "text_choice":
+            self.send_to_all_clients_in_room_but(room_code, Packet(type="text_choice", text=packet.get("text")),
+                                                 client)
 
+    def send_all_players_locked_in(self, room_code):
+        answers = self.rooms[room_code].locked_in_words
+        self.send_to_all_clients_in_room(room_code, Packet(type="all_locked_in", answers=answers))
 
     def send_room_list(self, room_code):
         if room_code not in self.rooms:
@@ -199,6 +226,9 @@ class Server:
             return False
         if room_code not in self.rooms:
             return False
+        room = self.rooms[room_code]
+        if room.state != Server.Room.STATE_LOBBY:
+            return False # Can't late join
         self.client_id_to_room[client_id] = room_code
         self.rooms[room_code].add_client(client_id)
         return True

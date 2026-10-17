@@ -49,7 +49,7 @@ class Button:
 
     @staticmethod
     def pre_init():
-        Button.FONT = pygame.font.Font("fonts/SEBASTIAN_INFORMAL.otf", 35)
+        Button.FONT = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 35)
         Button.FONT_CACHE = {char: Button.FONT.render(char, 1, c.WHITE) for char in c.CHARS}
         Button.FONT_CACHE_DISABLED = {char: Button.FONT.render(char, 1, (50, 50, 50)) for char in c.CHARS}
         Button.FONT_CACHE_HOVER = {char: Button.FONT.render(char, 1, c.YELLOW) for char in c.CHARS}

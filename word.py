@@ -5,7 +5,7 @@ import constants as c
 
 
 class Word(GameObject):
-    PUNCTUATION = ".,;!?-():'\""
+    PUNCTUATION = ".,;!?-():'\"[]"
 
     DEFAULT = 0
     HOVERED = 1
@@ -13,14 +13,20 @@ class Word(GameObject):
     SELECTED = 3
     COMPLETED = 4
 
-    def __init__(self, game, collection, text):
+    HIDER = 0
+    SEEKER_HIDING_PHASE = 1
+    SEEKER_SEEKING_PHASE = 2
+    SEEK_OVER = 3
+
+    def __init__(self, game, frame, collection, text):
         super().__init__(game)
         self.text = text
         self.prefix = self.get_prefix()
         self.suffix = self.get_suffix()
         self.inner_text = text.strip(self.PUNCTUATION)
 
-        self.surf = self.game.word_font.render(text, True, (255, 255, 255))
+        self.base_color = 0, 0, 0
+        self.surf = self.game.word_font.render(text, True, self.base_color)
         self.target_position = self.position
         self.index = 0
 
@@ -28,6 +34,11 @@ class Word(GameObject):
         self.collection = collection
         self.modified_inner_text = self.inner_text
         self.locked_in = False
+        self.seeker_state = Word.HIDER
+        self.frame = frame
+        self.revealed = False
+        self.found = False
+        self.unfound = False
 
     def has_been_changed(self):
         return self.inner_text.lower().strip() != self.modified_inner_text.lower().strip()
@@ -50,7 +61,14 @@ class Word(GameObject):
 
     def regenerate_text_surface(self):
         self.recalculate_display_text()
-        self.surf = self.game.word_font.render(self.text, True, (255, 255, 255))
+        color = self.base_color
+        if self.revealed:
+            color = 150, 150, 150
+        if self.found:
+            color = 0, 255, 0
+        if self.unfound:
+            color = 255, 0, 255
+        self.surf = self.game.word_font.render(self.text, True, color)
 
     def mouse_in_rect(self):
         mpos = pygame.mouse.get_pos()
@@ -85,10 +103,12 @@ class Word(GameObject):
         self.state = new_state
 
     def update(self, dt, events):
-        hovered = self.mouse_in_rect() and not self.locked_in
+        hovered = self.mouse_in_rect() and not self.locked_in and not self.seeker_state == self.SEEK_OVER
         if self.state == self.DEFAULT:
             if hovered:
                 self.update_state(self.HOVERED)
+                if self.game.is_seeker:
+                    self.frame.on_seeker_hover(self.index)
         elif self.state == self.HOVERED:
             if not hovered:
                 self.update_state(self.DEFAULT)
@@ -130,24 +150,56 @@ class Word(GameObject):
                 self.collection.recalculate_word_splitting_behavior()
                 self.collection.update_word_target_positions()
 
+    def on_click_seeker(self):
+        if self.seeker_state == Word.SEEKER_HIDING_PHASE or self.seeker_state == Word.SEEK_OVER:
+            return
+
+        if self.seeker_state == Word.SEEKER_SEEKING_PHASE:
+            self.seeker_shoot_here()
+
+    def seeker_shoot_here(self):
+        if self.game.sprocket:
+            self.game.sprocket.send(type="seeker_guess", word=self.index)
+        self.frame.seeker_guess(self.index)
+
     def on_click(self):
-        if self.state == self.DEFAULT or self.state == self.HOVERED:
-            self.update_state(self.SELECTED)
+        if self.seeker_state == Word.HIDER:
+            if self.state == self.DEFAULT or self.state == self.HOVERED:
+                self.update_state(self.SELECTED)
+        else:
+            self.on_click_seeker()
 
     def draw(self, surf, offset=(0, 0)):
+
         x = self.position.x + offset[0] - self.surf.get_width()//2
         y = self.position.y + offset[1] - self.surf.get_height()//2
-        surf.blit(self.surf, (x, y))
 
         rect_color = (255, 0, 0)
         if self.state == self.HOVERED:
-            rect_color = (255, 255, 255)
+            rect_color = (0, 0, 0)
         elif self.state == self.SELECTED:
-            rect_color = (255, 255, 0)
+            rect_color = (128, 100, 0)
         elif self.state == self.DISABLED:
             rect_color = (0, 255, 0)
-        if not self.state == self.DEFAULT:
-            pygame.draw.rect(surf, rect_color, (x - c.WORD_HOVER_MARGIN, y - c.WORD_HOVER_MARGIN, self.width() + 2*c.WORD_HOVER_MARGIN, self.height() + 2*c.WORD_HOVER_MARGIN), width=1)
+
+        if self.state in [self.DISABLED, self.SELECTED] or self.found or self.unfound:
+            background = (0, 0, 0)
+            if self.state == self.DISABLED:
+                background = (128, 128, 128)
+            if self.found:
+                background = (140, 10, 50)
+            if self.unfound:
+                background = (50, 10, 140)
+            pygame.draw.rect(surf, background, (x - c.WORD_HOVER_MARGIN, y - c.WORD_HOVER_MARGIN, self.width() + 2*c.WORD_HOVER_MARGIN, self.height() + 2*c.WORD_HOVER_MARGIN))
+            surf.blit(self.game.word_font.render(self.text, True, c.WHITE), (x, y))
+        else:
+            surf.blit(self.surf, (x, y))
+
+        if not self.state in [self.DEFAULT, self.DISABLED, self.SELECTED]:
+            pygame.draw.rect(surf, rect_color, (x - c.WORD_HOVER_MARGIN, y - c.WORD_HOVER_MARGIN, self.width() + 2*c.WORD_HOVER_MARGIN, self.height() + 2*c.WORD_HOVER_MARGIN), width=2)
+
+    def force_default_state(self):
+        self.state = Word.DEFAULT
 
     def width(self):
         return self.surf.get_width()

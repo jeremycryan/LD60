@@ -2,6 +2,8 @@ import pygame
 
 from main import Game
 from primitives import Pose
+from seeker_crosshairs import SeekerCrosshairs
+from seeker_shade import SeekerShade
 
 from texts_manager import TextsManager
 from timer import Timer
@@ -131,14 +133,74 @@ class RoomFrame(Frame):
 
     def receive_packet(self, packet):
         if packet.get("type") == "start_game":
+            if packet.get("seeker") == self.game.active_client_id:
+                self.game.is_seeker = True
+            else:
+                self.game.is_seeker = False
             self.done = True
+        if packet.get("type") == "text_choice":
+            self.game.active_text_key = packet.get("text")
+        if packet.get("type") == "category_options":
+            self.game.category_options = packet.get("texts")
+            if packet.get("seeker") == self.game.active_client_id:
+                self.game.web_log(f"Becoming seeker! {packet}, {self.game.active_client_id}")
+                self.game.is_seeker = True
+            else:
+                self.game.is_seeker = False
 
     def next_frame(self):
         if not self.canceled:
-            return MainGameplayFrame(self.game)
+            return CategorySelectFrame(self.game)
         else:
             return MainMenu(self.game)
 
+
+class CategorySelectFrame(Frame):
+    def __init__(self, game):
+        super().__init__(game)
+
+    def load(self):
+        self.header = self.game.category_header_font.render("   You're seeking.\nChoose a category.", True, (150, 150, 150), )
+        self.nonseeker_header = self.game.category_header_font.render("Waiting for seeker to\n  choose a category...", True, (150, 150, 150))
+
+        self.buttons = []
+        x = c.WINDOW_WIDTH//2
+        y = c.WINDOW_HEIGHT//2 - 100
+        for item in self.game.category_options:
+            category_string = TextsManager.get_display_name_from_key(item)
+            surf = pygame.Surface((300, 100))
+            surf.set_alpha(0)
+            self.buttons.append(Button(surf, (x, y), category_string, on_click=self.category_selected, on_click_args=[item]))
+            if not self.game.is_seeker:
+                self.buttons[-1].disable()
+            y += 100
+
+    def category_selected(self, key):
+        if self.game.sprocket:
+            self.game.sprocket.send(type="text_choice", text=key, i_think_i_am=self.game.active_client_id)
+        self.done = True
+        self.game.active_text_key = key
+
+    def update(self, dt, events):
+        for button in self.buttons:
+            button.update(dt, events)
+
+    def draw(self, surface, offset=(0, 0)):
+        surface.fill((100, 100, 128))
+        if self.game.is_seeker:
+            surface.blit(self.header, (c.WINDOW_WIDTH//2 - self.header.get_width()//2, 50))
+            for button in self.buttons:
+                button.draw(surface, *offset)
+        else:
+            surface.blit(self.nonseeker_header, (c.WINDOW_WIDTH//2 - self.header.get_width()//2, 50))
+
+    def receive_packet(self, packet):
+        if packet.get("type") == "text_choice":
+            self.game.active_text_key = packet.get("text")
+            self.done = True
+
+    def next_frame(self):
+        return MainGameplayFrame(self.game)
 
 class MainGameplayFrame(Frame):
     def __init__(self, game):
@@ -149,11 +211,26 @@ class MainGameplayFrame(Frame):
         self.age = 0
         self.since_all_players_locked_in = 0
         self.other_players_selected_words = {}
+        self.answers = {}
+        self.revealed = set()
+        self.ammo = 3
+        self.seek_over = False
+        self.moving_to_next_frame = False
+        self.since_last_crosshairs_message = 0
+
+    def draw_ammo(self, surface, offset = (0, 0)):
+        x = 10 + offset[0]
+        y = 10 + offset[1]
+        surf = pygame.Surface((10, 20))
+        surf.fill(c.YELLOW)
+        for i in range(self.ammo):
+            surface.blit(surf, (x, y))
+            x += 13
 
     def load(self):
         self.active_text_key = self.game.active_text_key
         self.display_text = TextsManager.get_text_from_key(self.active_text_key)
-        self.word_collection = WordCollection(self.game, self.display_text)
+        self.word_collection = WordCollection(self.game, self, self.display_text)
 
         button_surf = pygame.Surface((100, 50))
         button_surf.fill((0, 255, 0))
@@ -164,6 +241,19 @@ class MainGameplayFrame(Frame):
 
         self.seeking_timer = Timer(self.game, start_time=60)
         self.seeking_timer.position = Pose((c.WINDOW_WIDTH - 70, 160))
+
+        self.review_timer = Timer(self.game, start_time=20)
+        self.review_timer.position = Pose((c.WINDOW_WIDTH - 70, 250))
+
+        self.seeker_shade = SeekerShade(self.game)
+        self.seeker_shade.set_visible(self.game.is_seeker)
+
+        self.seeker_crosshairs = SeekerCrosshairs(self.game)
+        self.seeker_crosshairs.position = Pose((-50, -50))
+
+        if self.game.is_seeker:
+            self.word_collection.set_word_seeker_status(Word.SEEKER_HIDING_PHASE)
+            self.lock_in_button.x = 50000
 
     def lock_in_clicked(self):
         if self.can_lock_in():
@@ -183,14 +273,24 @@ class MainGameplayFrame(Frame):
         self.age += dt
         if self.all_players_locked_in:
             self.since_all_players_locked_in += dt
-            if self.since_all_players_locked_in > 2:
+            if self.since_all_players_locked_in > 2 and not self.seeking_timer.started:
                 self.seeking_timer.start()
-        self.word_collection.update(dt, events)
+                self.seeker_shade.set_visible(visible=False)
+                if self.game.is_seeker:
+                    self.on_seeker_start()
+
+        if (not self.game.is_seeker) or self.all_players_locked_in:
+            self.word_collection.update(dt, events)
+
+
         self.lock_in_button.update(dt, events)
         self.hiding_timer.update(dt, events)
         self.seeking_timer.update(dt, events)
+        self.review_timer.update(dt, events)
+
         if self.age > 2 and not self.hiding_timer.started:
             self.hiding_timer.start()
+
 
         if self.lock_in_button.enabled and self.hiding_timer.has_run_out():
             if self.can_lock_in():
@@ -198,20 +298,57 @@ class MainGameplayFrame(Frame):
             else:
                 if self.game.sprocket:
                     self.game.sprocket.send(type="hiding_timeout")
+                self.word_collection.deselect_all_words()
+                self.word_collection.lock_in(True)
             self.lock_in_button.disable()
 
+        self.seeker_shade.update(dt, events)
+
+        if self.review_timer.has_run_out() and not self.moving_to_next_frame:
+            if self.game.is_seeker:
+                self.moving_to_next_frame = True
+                if self.game.sprocket:
+                    self.game.sprocket.send(type="review_over")
+
+        if not self.seek_over and self.seeking_timer.has_run_out():
+            self.end_seeker_mode()
+
+        self.seeker_crosshairs.update(dt, events)
+        if self.game.is_seeker:
+            if self.all_players_locked_in and self.seeking_timer.started and not self.seek_over:
+                self.since_last_crosshairs_message += dt
+                if self.since_last_crosshairs_message > 0.25:
+                    self.since_last_crosshairs_message = 0
+                    self.give_seeker_hovering_update()
+
+    def on_seeker_start(self):
+        self.word_collection.lock_in(False)
+        self.word_collection.deselect_all_words()
+        self.word_collection.force_all_words_default()
+        self.word_collection.set_word_seeker_status(Word.SEEKER_SEEKING_PHASE)
+
     def draw(self, surface, offset=(0, 0)):
-        surface.fill((100, 25, 25))
+        surface.fill((225, 220, 217))
 
         self.word_collection.draw(surface, offset)
         self.lock_in_button.draw(surface, *offset)
+
+        if self.all_players_locked_in:
+            self.draw_ammo(surface, offset)
+
+        self.seeker_shade.draw(surface, offset)
         self.hiding_timer.draw(surface, offset)
         self.seeking_timer.draw(surface, offset)
+        self.review_timer.draw(surface, offset)
+
+        if not self.seek_over:
+            self.seeker_crosshairs.draw(surface, offset)
 
     def on_all_players_locked_in(self):
         self.all_players_locked_in = True
         self.hiding_timer.time = min(1, self.hiding_timer.time)
         Game.web_log("All players locked in!")
+
 
     def other_player_select_word(self, client_id, idx, value=None):
         if client_id in self.other_players_selected_words:
@@ -239,6 +376,7 @@ class MainGameplayFrame(Frame):
 
     def receive_packet(self, packet):
         if packet.get("type") == "all_locked_in":
+            self.answers = packet.get("answers")
             self.on_all_players_locked_in()
         if packet.get("type") == "lock_in_word_success":
             if packet.get("client_id") != self.game.active_client_id:
@@ -252,6 +390,96 @@ class MainGameplayFrame(Frame):
             self.unselect()
         if packet.get("type") == "hiding_timeout":
             self.other_player_select_word(packet.get("client"), -1)
+        if packet.get("type") == "seeker_guess":
+            self.seeker_guess(packet.get("word"))
+        if packet.get("type") == "seek_over":
+            self.on_end_seeker_mode()
+        if packet.get("type") == "seeker_hover":
+            word_idx = packet.get("word")
+            self.show_seeker_hovering(word_idx)
+        if packet.get("type") == "category_options":
+            self.game.category_options = packet.get("texts")
+            if packet.get("seeker") == self.game.active_client_id:
+                self.game.web_log(f"Becoming seeker! {packet}, {self.game.active_client_id}")
+                self.game.is_seeker = True
+            else:
+                self.game.is_seeker = False
+            self.done = True
+
+    def seeker_guess(self, index):
+        if index in self.revealed:
+            return
+        if not self.ammo:
+            return
+        found = -1
+        for client in self.answers:
+            answer = self.answers[client]
+            if answer and answer[0] == index:
+                found = client
+                break
+
+        if found != -1:
+            self.seeker_guess_success(index)
+            self.answers.pop(found)
+        else:
+            self.seeker_guess_failure(index)
+
+        if not self.ammo or not self.answers:
+            self.end_seeker_mode()
+
+    def seeker_guess_success(self, index):
+        self.revealed.add(index)
+        word = self.word_collection.word_index[index]
+        word.revealed = True
+        word.found = True
+        word.reset_to_base_text()
+
+    def seeker_guess_failure(self, index):
+        self.ammo -= 1
+        self.revealed.add(index)
+        word = self.word_collection.word_index[index]
+        word.revealed = True
+        word.regenerate_text_surface()
+
+    def end_seeker_mode(self):
+        if self.game.sprocket:
+            self.game.sprocket.send(type="seek_over")
+        self.on_end_seeker_mode()
+
+    def on_end_seeker_mode(self):
+        self.seek_over = True
+        self.word_collection.set_word_seeker_status(Word.SEEK_OVER)
+        self.review_timer.start()
+        self.seeking_timer.time = 0
+        for client in self.answers:
+            word_idx = self.answers[client][0]
+            if word_idx not in self.word_collection.word_index:
+                continue
+            word = self.word_collection.word_index[word_idx]
+            word.revealed = True
+            word.unfound = True
+            word.regenerate_text_surface()
+
+    def next_frame(self):
+        return CategorySelectFrame(self.game)
+
+    def on_seeker_hover(self, word_idx):
+        if self.game.is_seeker:
+            self.show_seeker_hovering(word_idx)
+
+    def give_seeker_hovering_update(self):
+        return
+        if not self.seeker_crosshairs.word_to_follow:
+            return
+        if self.game.sprocket:
+            self.game.sprocket.send(type="seeker_hover", word=self.seeker_crosshairs.word_to_follow.index)
+
+    def show_seeker_hovering(self, word_idx):
+        if word_idx in self.word_collection.word_index and self.seeking_timer.started:
+            word = self.word_collection.word_index[word_idx]
+            self.seeker_crosshairs.word_to_follow = word
+
+
 
 
 

@@ -26,4 +26,19 @@ class TextsManager:
     def get_random_key():
         return random.choice(TextsManager.TEXTS).get("name")
 
+    @staticmethod
+    def get_random_keys_no_overlap(n):
+        keys = []
+        while len(keys) < n:
+            item = TextsManager.get_random_key()
+            duplicate = False
+            for existing in keys:
+                if TextsManager.get_display_name_from_key(existing) == TextsManager.get_display_name_from_key(item):
+                    duplicate = True
+                    break
+            if duplicate:
+                continue
+            keys.append(item)
+        return keys
+
 

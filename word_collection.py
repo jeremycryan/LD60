@@ -3,13 +3,13 @@ from word import Word
 import constants as c
 
 class WordCollection(GameObject):
-    def __init__(self, game, text):
+    def __init__(self, game, frame, text):
         super().__init__(game)
         self.text = text
         self.text_lines = self.text.split("\n")
         self.words = [
             [
-                Word(self.game, self, word) for word in line.split()
+                Word(self.game, frame, self, word) for word in line.split()
             ]
             for line in self.text_lines
         ]
@@ -19,6 +19,7 @@ class WordCollection(GameObject):
         self.update_word_target_positions()
         self.snap_word_positions_to_target()
         self.locked_in = False
+        self.frame = frame
 
 
     def recalculate_word_splitting_behavior(self):
@@ -95,6 +96,11 @@ class WordCollection(GameObject):
                 if word.state == Word.SELECTED:
                     word.update_state(Word.DEFAULT)
 
+    def force_all_words_default(self):
+        for line in self.words:
+            for word in line:
+                word.force_default_state()
+
     def lock_in(self, lock = True):
         has_locked_in_word = False
         for word in self.word_index.values():
@@ -119,5 +125,9 @@ class WordCollection(GameObject):
             return False
         return True
 
+    def set_word_seeker_status(self, state):
+        for line in self.words:
+            for word in line:
+                word.seeker_state = state
 
 

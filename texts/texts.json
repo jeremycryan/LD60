@@ -16,6 +16,11 @@
   },
   {
     "display_name": "Tolkien",
+    "name": "Riddle of Strider",
+    "text": "All that is gold does not glitter,\nNot all those who wander are lost;\nThe old that is strong does not wither,\nDeep roots are not reached by the frost.\nFrom the ashes a fire shall be woken,\nA light from the shadows shall spring;\nRenewed shall be blade that was broken,\nThe crownless again shall be king."
+  },
+  {
+    "display_name": "Tolkien",
     "name": "Misty Mountains Cold",
     "text": "Far over the misty mountains cold\nTo dungeons deep and caverns old\nWe must away ere break of day\nTo seek the pale enchanted gold.\nThe dwarves of yore made mighty spells,\nWhile hammers fell like ringing bells\nIn places deep, where dark things sleep,\nIn hollow halls beneath the fells."
   },
@@ -24,9 +29,229 @@
     "name": "Declaration of Independence",
     "text": "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness. That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed."
   },
-    {
+  {
+    "display_name": "American Government",
+    "name": "The Constitution",
+    "text": "We the People of the United States, in Order to form a more perfect Union, establish Justice, insure domestic Tranquility, provide for the common defence, promote the general Welfare, and secure the Blessings of Liberty to ourselves and our Posterity, do ordain and establish this Constitution for the United States of America."
+  },
+  {
+    "display_name": "American Government",
+    "name": "The First Amendment",
+    "text": "Congress shall make no law respecting an establishment of religion, or prohibiting the free exercise thereof; or abridging the freedom of speech, or of the press; or the right of the people peaceably to assemble, and to petition the Government for a redress of grievances."
+  },
+  {
+    "display_name": "American Government",
+    "name": "Miranda Warning",
+    "text": "You have the right to remain silent. Anything you say can and will be used against you in a court of law. You have the right to an attorney. If you cannot afford an attorney, one will be provided for you. Do you understand the rights I have just read to you? With these rights in mind, do you wish to speak to me?"
+  },
+  {
+    "display_name": "American Government",
+    "name": "The Star-Spangled Banner",
+    "text": "O say can you see, by the dawn's early light,\nWhat so proudly we hailed at the twilight's last gleaming,\nWhose broad stripes and bright stars through the perilous fight\nO'er the ramparts we watched were so gallantly streaming?\nAnd the rocket's red glare, the bombs bursting in air,\nGave proof through the night that our flag was still there,\nO say does that star-spangled banner yet wave\nO'er the land of the free and the home of the brave?"
+  },
+  {
     "display_name": "The Bible",
     "name": "Genesis",
     "text": "In the beginning God created the heavens and the earth. Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters. And God said, \"Let there be light,\" and there was light. God saw that the light was good, and he separated the light from the darkness. God called the light \"day,\" and the darkness he called \"night.\""
+  },
+  {
+    "display_name": "Shakespeare",
+    "name": "Hamlet",
+    "text": "To be, or not to be: that is the question:\nWhether 'tis nobler in the mind to suffer\nThe slings and arrows of outrageous fortune,\nOr to take arms against a sea of troubles,\nAnd by opposing end them? To die: to sleep;\nNo more; and by a sleep to say we end\nThe heart-ache and the thousand natural shocks\nThat flesh is heir to, 'tis a consummation\nDevoutly to be wish'd. To die, to sleep."
+  },
+  {
+    "display_name": "Shakespeare",
+    "name": "Macbeth",
+    "text": "Double, double toil and trouble;\nFire burn and cauldron bubble.\nFillet of a fenny snake,\nIn the cauldron boil and bake;\nEye of newt and toe of frog,\nWool of bat and tongue of dog,\nAdder's fork and blind-worm's sting,\nLizard's leg and owlet's wing."
+  },
+  {
+    "display_name": "Shakespeare",
+    "name": "Romeo and Juliet",
+    "text": "Two households, both alike in dignity,\nIn fair Verona, where we lay our scene,\nFrom ancient grudge break to new mutiny,\nWhere civil blood makes civil hands unclean.\nFrom forth the fatal loins of these two foes\nA pair of star-cross'd lovers take their life;\nWhose misadventured piteous overthrows\nDo with their death bury their parents' strife."
+  },
+  {
+    "display_name": "Shakespeare",
+    "name": "Sonnet 18",
+    "text": "Shall I compare thee to a summer's day?\nThou art more lovely and more temperate:\nRough winds do shake the darling buds of May,\nAnd summer's lease hath all too short a date;\nSometime too hot the eye of heaven shines,\nAnd often is his gold complexion dimm'd;\nAnd every fair from fair sometime declines,\nBy chance or nature's changing course untrimm'd."
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "Jabberwocky",
+    "text": "'Twas brillig, and the slithy toves\nDid gyre and gimble in the wabe:\nAll mimsy were the borogoves,\nAnd the mome raths outgrabe.\n\"Beware the Jabberwock, my son!\nThe jaws that bite, the claws that catch!\nBeware the Jubjub bird, and shun\nThe frumious Bandersnatch!\""
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "The Road Not Taken",
+    "text": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth."
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "Fire and Ice",
+    "text": "Some say the world will end in fire,\nSome say in ice.\nFrom what I've tasted of desire\nI hold with those who favor fire.\nBut if it had to perish twice,\nI think I know enough of hate\nTo say that for destruction ice\nIs also great\nAnd would suffice."
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "The Raven",
+    "text": "Once upon a midnight dreary, while I pondered, weak and weary,\nOver many a quaint and curious volume of forgotten lore,\nWhile I nodded, nearly napping, suddenly there came a tapping,\nAs of some one gently rapping, rapping at my chamber door.\n\"'Tis some visitor,\" I muttered, \"tapping at my chamber door,\nOnly this and nothing more.\""
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "Ozymandias",
+    "text": "And on the pedestal these words appear:\n\"My name is Ozymandias, king of kings:\nLook on my works, ye Mighty, and despair!\"\nNothing beside remains. Round the decay\nOf that colossal wreck, boundless and bare\nThe lone and level sands stretch far away."
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "Do Not Go Gentle",
+    "text": "Do not go gentle into that good night,\nOld age should burn and rave at close of day;\bRage, rage against the dying of the light.\nThough wise men at their end know dark is right,\nBecause their words had forked no lightning they\nDo not go gentle into that good night."
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Bohemian Rhapsody",
+    "text": "Mama, just killed a man\nPut a gun against his head, pulled my trigger, now he's dead\nMama, life had just begun\nBut now I've gone and thrown it all away\nMama, ooh, didn't mean to make you cry\nIf I'm not back again this time tomorrow\nCarry on, carry on as if nothing really matters"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Yesterday",
+    "text": "Yesterday\nAll my troubles seemed so far away\nNow it looks as though they're here to stay\nOh, I believe in yesterday\nSuddenly\nI'm not half the man I used to be\nThere's a shadow hangin' over me\nOh, yesterday came suddenly"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Let It Be",
+    "text": "When I find myself in times of trouble, Mother Mary comes to me\nSpeaking words of wisdom, let it be\nAnd in my hour of darkness she is standing right in front of me\nSpeaking words of wisdom, let it be\nLet it be, let it be, let it be, let it be\nWhisper words of wisdom, let it be"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Baby",
+    "text": "Baby, baby, baby, oh\nLike baby, baby, baby, no\nLike baby, baby, baby, oh\nI thought you'd always be mine, mine\nBaby, baby, baby, oh\nLike baby, baby, baby, no\nLike baby, baby, baby, oh\nI thought you'd always be mine, mine"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "The Boxer",
+    "text": "I am just a poor boy\nThough my story's seldom told\nI have squandered my resistance\nFor a pocketful of mumbles\nSuch are promises\nAll lies and jest\nStill, a man hears what he wants to hear\nAnd disregards the rest"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Blank Space",
+    "text": "So it's gonna be forever\nOr it's gonna go down in flames\nYou can tell me when it's over,\nIf the high was worth the pain\nGot a long list of ex-lovers\nThey'll tell you I'm insane\n'Cause you know I love the players\nAnd you love the game"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Crazy Train",
+    "text": "Crazy, but that's how it goes\nMillions of people living as foes\nMaybe it's not too late\nTo learn how to love\nAnd forget how to hate\nMental wounds not healing\nLife's a bitter shame\nI'm going off the rails on a crazy train\nI'm going off the rails on a crazy train\n"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "I Will Always Love You",
+    "text": "If I should stay\nI would only be in your way\nSo I'll go, but I know\nI'll think of you each step of the way\nAnd I will always love you\nI will always love you"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Don't Stop Believin'",
+    "text": "Just a small-town girl, livin' in a lonely world\nShe took the midnight train goin' anywhere\nJust a city boy, born and raised in South Detroit\nHe took the midnight train goin' anywhere\nA singer in a smoky room\nThe smell of wine and cheap perfume\nFor a smile, they can share the night\nIt goes on and on and on and on"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Africa",
+    "text": "I hear the drums echoing tonight\nBut she hears only whispers of some quiet conversation\nShe's coming in, twelve-thirty flight\nThe moonlit wings reflect the stars that guide me towards salvation\nI stopped an old man along the way\nHoping to find some old forgotten words or ancient melodies\nHe turned to me as if to say, \"Hurry boy, it's waiting there for you\""
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Mr. Jones",
+    "text": "I was down at the New Amsterdam\nStaring at this yellow-haired girl\nMr. Jones strikes up a conversation\nWith a black-haired flamenco dancer\nYou know, she dances while his father plays guitar\nShe's suddenly beautiful\nAnd we all want something beautiful\nMan, I wish I was beautiful"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Fireflies",
+    "text": "You would not believe your eyes if ten million fireflies\nLit up the world as I fell asleep\n'Cause they'd fill the open air and leave teardrops everywhere\nYou'd think me rude, but I would just stand and stare\nI'd like to make myself believe\nThat planet Earth turns slowly\nIt's hard to say that I'd rather stay awake when I'm asleep\n'Cause everything is never as it seems"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Billie Jean",
+    "text": "She was more like a beauty queen from a movie scene\nI said, \"Don't mind, but what do you mean, I am the one\nWho will dance on the floor in the round?\"\nShe said I am the one\nWho will dance on the floor in the round\nShe told me her name was Billie Jean as she caused a scene\nThen every head turned with eyes that dreamed of bein' the one\nWho will dance on the floor in the round"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Fly Me To The Moon",
+    "text": "Fly me to the moon\nLet me play among the stars\nLet me see what spring is like\nOn Jupiter and Mars\nIn other words, hold my hand\nIn other words, baby, kiss me"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Toxic",
+    "text": "Too high, can't come down\nLosin' my head, spinnin' 'round and 'round\nDo you feel me now?\nWith the taste of your lips, I'm on a ride\nYou're toxic, I'm slippin' under\nWith a taste of the poison, paradise\nI'm addicted to you, don't you know that you're toxic?\nAnd I love what you do, don't you know that you're toxic?"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Call Me Maybe",
+    "text": "I threw a wish in the well\nDon't ask me, I'll never tell\nI looked to you as it fell\nAnd now you're in my way\nI trade my soul for a wish\nPennies and dimes for a kiss\nI wasn't lookin' for this\nBut now you're in my way"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "Every Breath You Take",
+    "text": "Every breath you take, and every move you make\nEvery bond you break, every step you take\nI'll be watching you\nEvery single day, and every word you say\nEvery game you play, every night you stay\nI'll be watching you"
+  },
+  {
+    "display_name": "Famous Song Lyrics",
+    "name": "You Are My Sunshine",
+    "text": "You are my sunshine\nMy only sunshine\nYou make me happy\nWhen skies are gray\nYou'll never know, dear\nHow much I love you\nPlease don't take\nMy sunshine away"
+  },
+  {
+    "display_name": "Internet Copypasta",
+    "name": "The Bee Movie",
+    "text": "According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway because bees don't care what humans think is impossible. Yellow, black. Yellow, black. Yellow, black. Yellow, black. Ooh, black and yellow! Let's shake it up a little."
+  },
+  {
+    "display_name": "Internet Copypasta",
+    "name": "Navy Seal",
+    "text": "What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces."
+  },
+  {
+    "display_name": "Internet Copypasta",
+    "name": "Darth Plagueis the Wise",
+    "text": "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life... He had such a knowledge of the dark side that he could even keep the ones he cared about from dying."
+  },
+  {
+    "display_name": "Science Fiction",
+    "name": "Laws of Robotics",
+    "text": "1. A robot may not injure a human being or, through inaction, allow a human being to come to harm.\n2. A robot must obey the orders given it by human beings except where such orders would conflict with the First Law.\n3. A robot must protect its own existence as long as such protection does not conflict with the First or Second Law."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Luggage",
+    "text": "Be sure all carry-on items are securely stowed in a overhead bin, and place smaller items under the seat in front of you. And, ensure all aisles, exits and bulkhead area are clear. If you are seated at an emergency exit, please review the Responsibilities for Emergency Exit Seating on the back of Safety Information Card which is in your seat pocket."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Seatbelts",
+    "text": "To fasten, insert the metal tip into the buckle and adjust the strap so it's low and tight across your lap. To release the belt, just lift the top of the buckle. Please, remain seated with your seatbelt securely fastened anytime the seatbelt sign is on, and even if the seatbelt sign is off, please keep your seatbelt fastened in case we experience unexpected rough air."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Smoking",
+    "text": "For everyone's safety, federal regulations require all passengers to comply with the posted placards and lighted information signs located throughout the cabin in addition to any crew member's instruction. Smoking, including the use of E-cigarettes, is not allowed on any Delta flight, and federal laws prohibit tampering with, disabling or destroying a restroom's smoke detector."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Exits",
+    "text": "There are ten exits on this plane; six doors: three on each side, and four exit Windows over the wings. Each door has a detectable slide that can be used as a raft. An additional raft is located in a ceiling compartment on the back of the plane. All exits are clearly marked with an Exit sign. However, if there is a loss of power and cabin visibility is reduced, lights will illuminate the aisle to guide you to an exit."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Oxygen Masks",
+    "text": "It's unlikely but if cabin pressure changes, the panels above your seat will open revealing oxygen masks. If this happens, reach up and pull the mask towards you until the tube is fully extended. Place the mask over your nose and mouth. Slip the elastic strap over your head and adjust the mask if necessary. Breathe normally and note that oxygen is flowing; so, don't worry if the bag doesn't inflate."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Water Evacuation",
+    "text": "A water evacuation is also unlikely, but just in case, life vests are located under your seats in the main cabin. If you are seated in the first class or business class cabin, life vests are either in a compartment beneath or adjacent to your seat. To use, remove the vest from its container by pulling on the tab and then opening the pouch. Slip the vest over your head."
+  },
+  {
+    "display_name": "Delta Safety Video",
+    "name": "Prepare for Takeoff",
+    "text": "Now, before we takeoff, be sure your seat is upright, your armrests are lowered, your tray table is put away and all carry-on items are properly stowed. And finally now, it'd be a good time for everyone to review the Safety information card which is in your seat pocket. On behalf of everyone at Delta Airlines, we want to thank you for paying attention. Now, as we prepare for takeoff, please relax and enjoy your flight."
+  },
+  {
+    "display_name": "Software",
+    "name": "MIT License",
+    "text": "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
   }
 ]
