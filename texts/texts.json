@@ -1,0 +1,32 @@
+[
+  {
+    "display_name": "The Bible",
+    "name": "The Lord's Prayer",
+    "text": "Our Father, who art in heaven, hallowed be thy name.\nThy kingdom come; thy will be done; on earth as it is in heaven.\nGive us this day our daily bread, and forgive us our trespasses,\nAs we forgive those who tresspass against us.\nAnd lead us not into temptation; but deliver us from evil.\nFor thine is the kingdom, the power and the glory,\nFor ever and ever. Amen."
+  },
+  {
+    "display_name": "Tolkien",
+    "name": "The Hobbit",
+    "text": "In a hole in the ground there lived a hobbit. Not a nasty, dirty, wet hole, filled with the ends of worms and an oozy smell, nor yet a dry, bare, sandy hole with nothing in it to sit down on or to eat: it was a hobbit-hole, and that means comfort."
+  },
+  {
+    "display_name": "Tolkien",
+    "name": "The Ring Verse",
+    "text": "Three rings for the Elven-kings under the sky,\nSeven for the Dwarf-lords in their halls of stone,\nNine for Mortal Men doomed to die,\nOne for the Dark Lord on his dark throne,\nIn the Land of Mordor where the Shadows lie,\nOne Ring to rule them all, One Ring to find them,\nOne Ring to bring them all and in the darkness bind them,\nIn the Land of Mordor where the Shadows lie."
+  },
+  {
+    "display_name": "Tolkien",
+    "name": "Misty Mountains Cold",
+    "text": "Far over the misty mountains cold\nTo dungeons deep and caverns old\nWe must away ere break of day\nTo seek the pale enchanted gold.\nThe dwarves of yore made mighty spells,\nWhile hammers fell like ringing bells\nIn places deep, where dark things sleep,\nIn hollow halls beneath the fells."
+  },
+  {
+    "display_name": "American Government",
+    "name": "Declaration of Independence",
+    "text": "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness. That to secure these rights, Governments are instituted among Men, deriving their just powers from the consent of the governed."
+  },
+    {
+    "display_name": "The Bible",
+    "name": "Genesis",
+    "text": "In the beginning God created the heavens and the earth. Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters. And God said, \"Let there be light,\" and there was light. God saw that the light was good, and he separated the light from the darkness. God called the light \"day,\" and the darkness he called \"night.\""
+  }
+]
