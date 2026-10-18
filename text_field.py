@@ -44,6 +44,8 @@ class TextField(GameObject):
     def on_keypress(self, event):
         key = event.key
         character = event.unicode.upper()
+        if key == pygame.K_RETURN:
+            return
         if self.state == Word.SELECTED:
             modified = False
             if key is pygame.K_BACKSPACE:
@@ -57,6 +59,7 @@ class TextField(GameObject):
                     modified = True
             if modified:
                 self.regenerate_text_surface()
+                self.game.play_key_sound()
 
     def mouse_in_rect(self):
         mpos = pygame.mouse.get_pos()

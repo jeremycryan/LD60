@@ -76,6 +76,7 @@ class NameFrame(Frame):
         name = self.join_text_field.text
         if not name:
             return
+        self.game.ding.play()
         self.join_room_button.disable()
         self.game.username = name
         self.leaving = True
@@ -91,6 +92,8 @@ class NameFrame(Frame):
         self.showing = -(abs((age_capped-1)**3)) + 1
 
         if self.leaving and self.since_left > 1:
+            self.game.piano_music.play(-1)
+            self.game.music.play(-1)
             self.done = True
 
         if len(self.join_text_field.text) < 1:
@@ -233,6 +236,7 @@ class MainMenu(Frame):
     def try_join_room(self):
         if not self.has_connected():
             return
+        self.game.ding.play()
         self.game.sprocket.send(type="join_room", code=self.join_text_field.text, username=self.game.username)
 
     def receive_packet(self, packet):
@@ -308,11 +312,17 @@ class RoomFrame(Frame):
         age_capped = min(1, self.age, 1 - self.since_left)
         self.showing = -(abs((age_capped-1)**3)) + 1
 
+        self.game.balance_toward = self.showing
+
         if self.leaving:
             self.since_left += dt
 
         if self.since_left > 1:
             self.done = True
+            if not self.canceled:
+                self.game.set_target_balance(-1)
+                self.game.music.fadeout(1000)
+                self.game.piano_music.fadeout(1000)
 
     def draw(self, surf, offset=(0, 0)):
         surf.fill((1, 15, 22))
@@ -563,6 +573,7 @@ class MainGameplayFrame(Frame):
             self.since_all_players_locked_in += dt
             if self.since_all_players_locked_in > 2 and not self.seeking_timer.started:
                 self.seeking_timer.start()
+                self.game.seeking_music.play()
                 self.seeker_shade.set_visible(visible=False)
                 if self.game.is_seeker:
                     self.on_seeker_start()
@@ -578,6 +589,7 @@ class MainGameplayFrame(Frame):
 
         if self.age > 2 and not self.hiding_timer.started:
             self.hiding_timer.start()
+            self.game.hiding_music.play()
 
 
         if self.hiding_timer.has_run_out() and not self.hiding_timer_run_out_flag and not self.game.is_seeker:
@@ -678,6 +690,7 @@ class MainGameplayFrame(Frame):
         self.all_players_locked_in = True
         self.hiding_timer.time = min(1, self.hiding_timer.time)
         Game.web_log("All players locked in!")
+        self.game.hiding_music.fadeout(1000)
 
 
     def other_player_select_word(self, client_id, idx, value=None):
@@ -784,6 +797,7 @@ class MainGameplayFrame(Frame):
         if self.game.sprocket:
             self.game.sprocket.send(type="seek_over")
         self.on_end_seeker_mode()
+        self.game.seeking_music.fadeout(1000)
 
     def on_end_seeker_mode(self):
         self.seek_over = True

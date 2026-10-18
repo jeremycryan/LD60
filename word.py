@@ -178,6 +178,8 @@ class Word(GameObject):
             return
         key = event.key
         character = event.unicode
+        if key == pygame.K_RETURN:
+            return
         if self.state == self.SELECTED:
             modified = False
             if key is pygame.K_BACKSPACE:
@@ -193,6 +195,8 @@ class Word(GameObject):
                 self.regenerate_text_surface()
                 self.collection.recalculate_word_splitting_behavior()
                 self.collection.update_word_target_positions()
+
+                self.game.play_key_sound()
 
             if self.word_valid():
                 self.frame.lock_in_button.enable()

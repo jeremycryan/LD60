@@ -60,9 +60,43 @@ class Game:
 
         self.main_menu_has_loaded = False
 
+        self.piano_music = SoundManager.load("audio/music_piano_only.ogg")
+        self.music = SoundManager.load("audio/music.ogg")
+        self.hiding_music = SoundManager.load("audio/hiding.ogg")
+        self.hiding_music.set_volume(0.2)
+        self.seeking_music = SoundManager.load("audio/seeking.ogg")
+        self.seeking_music.set_volume(0.2)
+        self.balance_toward = 0
+        self.target_balance = 0
+
+        self.key_sounds = [SoundManager.load(f"audio/key_{n+2}.ogg") for n in range(3)]
+        self.ding = SoundManager.load("audio/ding.ogg")
+
         pygame.display.set_caption(f"{c.CAPTION}")
 
         asyncio.run(self.main())
+
+    def play_key_sound(self):
+        random.choice(self.key_sounds).play()
+
+    def set_target_balance(self, target):
+        self.target_balance = target
+
+    def update_balance(self, dt, events):
+        if self.target_balance == -1:
+            return
+        if self.target_balance == 0:
+            self.balance_toward -= dt
+        else:
+            self.balance_toward += dt
+        if self.balance_toward < 0:
+            self.balance_toward = 0
+        if self.balance_toward > 1:
+            self.balance_toward = 1
+
+        volume = 0.1
+        self.music.set_volume(volume * self.balance_toward)
+        self.piano_music.set_volume(volume * (1 - self.balance_toward) * 0.5)
 
     async def initialize_sprocket(self):
         if not self.is_web_build():
@@ -127,6 +161,7 @@ class Game:
                     current_frame.receive_packet(packet)
 
             current_frame.update(dt, events)
+            self.update_balance(dt, events)
             current_frame.draw(self.screen, self.get_shake_offset().get_position())
             pygame.display.flip()
             await asyncio.sleep(0)
