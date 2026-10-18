@@ -28,10 +28,13 @@ class Game:
         self.active_text_key = "Smoking"
         self.category_options = ["Smoking"]
         self.word_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 28)
+        self.player_list_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
         self.category_button_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 50)
         self.category_header_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 50)
+        self.category_loading_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 26)
         self.timer_font = pygame.font.Font("fonts/SEBASTIAN_INFORMAL.otf", 64)
-        self.room_code_font = pygame.font.Font("fonts/Kingthings Trypewriter 2.ttf", 200)
+        self.room_code_font = pygame.font.Font("fonts/Kingthings Trypewriter 2.ttf", 185)
+
 
         self.small_screen = pygame.Surface(c.WINDOW_SIZE)
         self.screen = pygame.display.set_mode(c.SCALED_WINDOW_SIZE)

@@ -148,6 +148,8 @@ class Server:
                 self.send_to_all_clients_in_room(room_code, Packet(type="start_game", seeker=room.seeker))
         if packet.get("type") == "leave_room":
             self.handle_disconnect(client)
+            self.send_room_list(room_code)
+
         if packet.get("type") == "lock_in_word":
             if room.set_locked_in_word(client, packet.get("word"), packet.get("value")):
                 self.send_to_all_clients_in_room(room_code,

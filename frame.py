@@ -1,5 +1,6 @@
 import pygame
 
+from image_manager import ImageManager
 from main import Game
 from primitives import Pose
 from seeker_crosshairs import SeekerCrosshairs
@@ -102,34 +103,94 @@ class MainMenu(Frame):
 class RoomFrame(Frame):
     def load(self):
         self.game.sprocket.send(type="hello")
-        button_surf = pygame.Surface((180, 50))
+        button_surf = pygame.Surface((410, 50))
         button_surf.fill((0, 255, 0))
-        self.create_room_button = Button(button_surf, (c.WINDOW_WIDTH//2 - 90, c.WINDOW_HEIGHT - 80), "Start Game", self.try_start_game)
+        button_surf.set_alpha(0)
+        self.create_room_button = Button(button_surf, (c.WINDOW_WIDTH//2 + 130, c.WINDOW_HEIGHT - 63), "Start Game", self.try_start_game, disabled_surf=button_surf,  hover_surf=ImageManager.load_copy("images/start_button_frame.png"))
 
-        button_surf = pygame.Surface((180, 50))
+        button_surf = pygame.Surface((230, 50))
         button_surf.fill((255, 0, 0))
-        self.leave_button = Button(button_surf, (c.WINDOW_WIDTH//2 - 300, c.WINDOW_HEIGHT - 80), "Leave Room", self.leave_room)
+        button_surf.set_alpha(0)
+        self.leave_button = Button(button_surf, (c.WINDOW_WIDTH//2 - 430, c.WINDOW_HEIGHT - 63), "Leave Room", self.leave_room, hover_surf=ImageManager.load_copy("images/start_button_frame.png"))
 
         self.text = self.game.room_code_font.render(self.game.active_room, True, (0, 0, 0))
         self.canceled = False
 
+        self.background = ImageManager.load("images/room_background.png")
+        self.additive_overlay_1 = ImageManager.load("images/room_additive.png")
+        self.additive_overlay_2 = ImageManager.load("images/lamp_add.png")
+        self.age = 0
+
+        self.current_players = [self.game.active_client_id]
+        self.current_player_texts = []
+        self.update_current_player_texts()
+
+        self.leaving = False
+        self.since_left = 0
+
+        self.black = pygame.Surface(c.WINDOW_SIZE)
+        self.black.fill((0, 0, 0))
+
+    def update_current_player_texts(self):
+        self.current_player_texts = []
+        for player in self.current_players:
+            name = f"{player}" # TODO get actual name
+            text = self.game.player_list_font.render(name, True, (178, 192, 199))
+            self.current_player_texts.append(text)
+
     def update(self, dt, events):
         self.create_room_button.update(dt, events)
         self.leave_button.update(dt, events)
+        self.age += dt
+        age_capped = min(1, self.age, 1 - self.since_left)
+        self.showing = -(abs((age_capped-1)**3)) + 1
+
+        if self.leaving:
+            self.since_left += dt
+
+        if self.since_left > 1:
+            self.done = True
 
     def draw(self, surf, offset=(0, 0)):
-        surf.fill((100, 180, 130))
-        surf.blit(self.text, (400, 100))
+        surf.fill((1, 15, 22))
+
+        yoff = (1 - self.showing)*1200
+        if self.leaving and not self.canceled:
+            yoff *= -1
+        offset = offset[0], offset[1] + yoff
+        partial_offset = offset[0], offset[1]*1.25
+        surf.blit(self.background, offset)
+        surf.blit(self.text, (410 + offset[0], 123 + partial_offset[1]))
+        #.blit(self.additive_overlay_1, (0, 0), special_flags=pygame.BLEND_ADD)
+        surf.blit(self.additive_overlay_2, (offset[0] +854, offset[1] + 392) , special_flags=pygame.BLEND_ADD)
+
         self.create_room_button.draw(surf, *offset)
         self.leave_button.draw(surf, *offset)
+
+        if len(self.current_players) < 2:
+            self.create_room_button.disable()
+        else:
+            self.create_room_button.enable()
+
+        x = 200
+        y = 90
+        for text in self.current_player_texts:
+            surf.blit(text, (x + offset[0] - text.get_width()//2, y + offset[1] - text.get_height()//2))
+            y += 38
+
+        self.black.set_alpha(255 * (1 - self.showing)**2)
+        if self.black.get_alpha() > 1:
+            surf.blit(self.black, (0, 0))
 
     def try_start_game(self):
         self.game.sprocket.send(type="start_game")
 
     def leave_room(self):
         self.game.sprocket.send(type="leave_room")
-        self.done = True
         self.canceled = True
+        self.leaving = True
+        self.create_room_button.disable()
+        self.leave_button.disable()
 
     def receive_packet(self, packet):
         if packet.get("type") == "start_game":
@@ -137,7 +198,7 @@ class RoomFrame(Frame):
                 self.game.is_seeker = True
             else:
                 self.game.is_seeker = False
-            self.done = True
+            self.leaving = True
         if packet.get("type") == "text_choice":
             self.game.active_text_key = packet.get("text")
         if packet.get("type") == "category_options":
@@ -147,6 +208,9 @@ class RoomFrame(Frame):
                 self.game.is_seeker = True
             else:
                 self.game.is_seeker = False
+        if packet.get("type") == "room_list":
+            self.current_players = packet.get("clients")
+            self.update_current_player_texts()
 
     def next_frame(self):
         if not self.canceled:
