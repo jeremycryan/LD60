@@ -6,6 +6,7 @@ from bullet_impact import BulletImpact
 from category_toast import CategoryToast
 from image_manager import ImageManager
 from main import Game
+from message_toast import MessageToast
 from primitives import Pose
 from py_sprocket_web.web_sprocket import WebSprocket
 from seeker_crosshairs import SeekerCrosshairs
@@ -557,6 +558,8 @@ class MainGameplayFrame(Frame):
         self.lock_in_button.disable()
         self.hiding_timer_run_out_flag = False
 
+        self.message_toast = MessageToast(self.game)
+
     def lock_in_clicked(self):
         if self.can_lock_in():
             self.game.shake(7)
@@ -576,6 +579,7 @@ class MainGameplayFrame(Frame):
     def update(self, dt, events):
         self.age += dt
         self.category_toast.update(dt, events)
+        self.message_toast.update(dt, events)
 
         if self.all_players_locked_in:
             self.since_all_players_locked_in += dt
@@ -691,6 +695,8 @@ class MainGameplayFrame(Frame):
             pass
             #self.seeker_crosshairs.draw(surface, offset)
 
+        self.message_toast.draw(surface, offset)
+
         self.category_toast.draw(surface, offset)
         self.bullet_impact.draw(surface, offset)
 
@@ -775,6 +781,10 @@ class MainGameplayFrame(Frame):
                 word = self.word_collection.word_index[index]
                 self.found_words[index] = word.modified_inner_text
                 word.owner = int(found)
+
+                if word.owner in self.game.username_dict:
+                    found_name = self.game.username_dict[word.owner]
+                    self.message_toast.add_message(f"{self.game.username} FOUND {found_name}!")
             self.seeker_guess_success(index)
             self.answers.pop(found)
         else:

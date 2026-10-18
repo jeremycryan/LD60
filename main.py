@@ -29,6 +29,7 @@ class Game:
         self.active_text_key = "Smoking"
         self.category_options = ["Smoking"]
         self.word_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
+        self.message_toast_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
         self.type_code_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 36)
         self.toast_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 60)
         self.player_list_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
