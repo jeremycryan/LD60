@@ -92,7 +92,7 @@
   {
     "display_name": "Famous Poems",
     "name": "The Raven",
-    "text": "Once upon a midnight dreary, while I pondered, weak and weary,\nOver many a quaint and curious volume of forgotten lore,\nWhile I nodded, nearly napping, suddenly there came a tapping,\nAs of some one gently rapping, rapping at my chamber door.\n\"'Tis some visitor,\" I muttered, \"tapping at my chamber door,\nOnly this and nothing more.\""
+    "text": "Once upon a midnight dreary,\nWhile I pondered, weak and weary,\nOver many a quaint and curious\nVolume of forgotten lore,\nWhile I nodded, nearly napping,\nSuddenly there came a tapping,\nAs of some one gently rapping,\nRapping at my chamber door."
   },
   {
     "display_name": "Famous Poems",

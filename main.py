@@ -28,6 +28,8 @@ class Game:
         self.active_text_key = "Smoking"
         self.category_options = ["Smoking"]
         self.word_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 28)
+        self.type_code_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 36)
+        self.toast_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 60)
         self.player_list_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
         self.category_button_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 50)
         self.category_header_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 50)
@@ -51,6 +53,8 @@ class Game:
         self.is_seeker = False
 
         self.sprocket = None
+
+        self.main_menu_has_loaded = False
 
         pygame.display.set_caption(f"{c.CAPTION}")
 

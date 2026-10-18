@@ -5,7 +5,7 @@ from word import Word
 
 
 class TextField(GameObject):
-    WIDTH = 90
+    WIDTH = 125
 
     def __init__(self, game):
         super().__init__(game)
@@ -27,6 +27,8 @@ class TextField(GameObject):
                 if event.button == 1:
                     if hovered:
                         self.state = Word.SELECTED
+                    else:
+                        self.state = Word.DEFAULT
             if event.type == pygame.KEYDOWN:
                 self.on_keypress(event)
 
@@ -63,18 +65,21 @@ class TextField(GameObject):
         return False
 
     def regenerate_text_surface(self):
-        self.surf = self.game.word_font.render(self.text, True, (255, 255, 255))
+        if self.text:
+            self.surf = self.game.type_code_font.render(self.text, True, (255, 255, 255))
+        else:
+            self.surf = self.game.type_code_font.render("XXXX", True, (76, 69, 60))
 
     def draw(self, surf, offset=(0, 0)):
         x = self.position.x + offset[0]
         y = self.position.y + offset[1] - self.surf.get_height()//2
         surf.blit(self.surf, (x + self.WIDTH//2 - self.surf.get_width()//2, y + 2))
 
-        rect_color = (255, 0, 0)
+        rect_color = (0, 0, 0)
         if self.state == Word.HOVERED:
             rect_color = (255, 255, 255)
         elif self.state == Word.SELECTED:
             rect_color = (255, 255, 0)
         elif self.state == Word.DISABLED:
             rect_color = (0, 255, 0)
-        pygame.draw.rect(surf, rect_color, (x - c.WORD_HOVER_MARGIN, y - c.WORD_HOVER_MARGIN, self.WIDTH + 2*c.WORD_HOVER_MARGIN, self.surf.get_height() + 2*c.WORD_HOVER_MARGIN), width=1)
+        pygame.draw.rect(surf, rect_color, (x - c.WORD_HOVER_MARGIN, y - c.WORD_HOVER_MARGIN, self.WIDTH + 2*c.WORD_HOVER_MARGIN, self.surf.get_height() + 2*c.WORD_HOVER_MARGIN), width=2)

@@ -1,5 +1,9 @@
+import time
+
 import pygame
 
+from bullet_impact import BulletImpact
+from category_toast import CategoryToast
 from image_manager import ImageManager
 from main import Game
 from primitives import Pose
@@ -44,17 +48,35 @@ class MainMenu(Frame):
         self.room_code = ""
         self.hello_sent = False
 
-    def load(self):
-        button_surf = pygame.Surface((180, 50))
-        button_surf.fill((0, 255, 0))
-        self.create_room_button = Button(button_surf, (c.WINDOW_WIDTH - 130, c.WINDOW_HEIGHT - 80), "Create Room", self.try_create_room)
+        self.top_back_color = 111, 104, 94
+        self.bottom_back_color = 25, 18, 8
+        self.first_load = False
 
-        button_surf = pygame.Surface((150, 50))
-        button_surf.fill((0, 128, 200))
-        self.join_room_button = Button(button_surf, (c.WINDOW_WIDTH - 320, c.WINDOW_HEIGHT - 80), "Join Room", self.try_join_room)
+        self.age = 0
+        self.black = pygame.Surface(c.WINDOW_SIZE)
+        self.black.fill((0, 0, 0))
+
+    def load(self):
+        self.first_load = not self.game.main_menu_has_loaded
+        self.game.main_menu_has_loaded = True
+        button_surf = pygame.Surface((250, 50))
+        button_surf.fill((1, 15, 22))
+        disabled_surf = button_surf.copy()
+        disabled_surf.set_alpha(50)
+        self.create_room_button = Button(button_surf, (175, 184), "Create Room", self.try_create_room, disabled_surf=disabled_surf)
+
+        button_surf = pygame.Surface((250, 50))
+        button_surf.fill((1, 15, 22))
+        disabled_surf = button_surf.copy()
+        disabled_surf.set_alpha(50)
+        self.join_room_button = Button(button_surf, (1113, 184), "Join Room", self.try_join_room, disabled_surf=disabled_surf)
 
         self.join_text_field = TextField(self.game)
-        self.join_text_field.position = Pose((c.WINDOW_WIDTH - 500, c.WINDOW_HEIGHT - 80))
+        self.join_text_field.position = Pose((1113-self.join_text_field.WIDTH//2, 115))
+
+        self.background = ImageManager.load_copy("images/typewriter.png")
+        self.since_left = 0
+        self.leaving = False
 
 
     def update(self, dt, events):
@@ -66,12 +88,44 @@ class MainMenu(Frame):
             self.game.sprocket.send(type="hello")
             self.hello_sent = True
 
+        self.age += dt
+        if self.leaving:
+            self.since_left += dt
+        age_capped = min(1, self.age, 1 - self.since_left)
+        self.showing = -(abs((age_capped-1)**3)) + 1
+
+        if self.leaving and self.since_left > 1:
+            self.done = True
+
+        if len(self.join_text_field.text) < 4:
+            self.join_room_button.disable()
+        elif not self.leaving:
+            self.join_room_button.enable()
+
+
 
     def draw(self, surf, offset=(0, 0)):
-        surf.fill((0, 0, 0))
-        self.create_room_button.draw(surf, *offset)
-        self.join_room_button.draw(surf, *offset)
-        self.join_text_field.draw(surf, offset)
+
+        yoff = (1 - self.showing)*1200
+        if not self.first_load or self.leaving:
+            yoff *= -1
+        offset = offset[0], offset[1] + yoff
+
+        if self.first_load and yoff > 0:
+            surf.fill(self.top_back_color)
+        else:
+            surf.fill(self.bottom_back_color)
+
+        surf.blit(self.background, offset)
+        self.create_room_button.draw(surf, offset[0], offset[1]*1.25)
+        self.join_room_button.draw(surf, offset[0], offset[1]*1.25)
+        self.join_text_field.draw(surf, (offset[0], offset[1]*1.25))
+
+
+
+        self.black.set_alpha(255 * (1 - self.showing)**2)
+        if self.black.get_alpha() > 1:
+            surf.blit(self.black, (0, 0))
 
     def has_connected(self):
         return self.hello_sent and self.game.active_client_id != -1
@@ -89,10 +143,12 @@ class MainMenu(Frame):
     def receive_packet(self, packet):
         if packet.get("type") == "new_room_success":
             self.game.active_room = packet.get("code")
-            self.done = True
+            self.leaving = True
+            self.create_room_button.disable()
         elif packet.get("type") == "join_room_success":
             self.game.active_room = packet.get("code")
-            self.done = True
+            self.leaving = True
+            self.join_room_button.disable()
         elif packet.get("type") == "hello":
             self.game.active_client_id = packet.get("client_id")
 
@@ -225,7 +281,7 @@ class CategorySelectFrame(Frame):
 
     def load(self):
         self.header = self.game.category_header_font.render("   You're seeking.\nChoose a category.", True, (150, 150, 150), )
-        self.nonseeker_header = self.game.category_header_font.render("Waiting for seeker to\n  choose a category...", True, (150, 150, 150))
+        self.nonseeker_headers = [self.game.player_list_font.render("Waiting for seeker to\n  choose a category." + "."* i, True, (200, 200, 200)) for i in range(3)]
 
         self.buttons = []
         x = c.WINDOW_WIDTH//2
@@ -238,30 +294,54 @@ class CategorySelectFrame(Frame):
             if not self.game.is_seeker:
                 self.buttons[-1].disable()
             y += 100
+        self.age = 0
+        self.black = pygame.Surface(c.WINDOW_SIZE)
+        self.black.fill((0, 0, 0))
+        self.since_leave = 0
+        self.leaving = False
+
+
 
     def category_selected(self, key):
+        if self.leaving:
+            return
         if self.game.sprocket:
             self.game.sprocket.send(type="text_choice", text=key, i_think_i_am=self.game.active_client_id)
-        self.done = True
+        self.leaving = True
         self.game.active_text_key = key
+        for button in self.buttons:
+            button.disable()
 
     def update(self, dt, events):
         for button in self.buttons:
             button.update(dt, events)
+        self.age += dt
+        if self.leaving:
+            self.since_leave += dt
+            if self.since_leave > 1:
+                self.done = True
 
     def draw(self, surface, offset=(0, 0)):
-        surface.fill((100, 100, 128))
         if self.game.is_seeker:
+            surface.fill((100, 100, 128))
             surface.blit(self.header, (c.WINDOW_WIDTH//2 - self.header.get_width()//2, 50))
             for button in self.buttons:
                 button.draw(surface, *offset)
         else:
-            surface.blit(self.nonseeker_header, (c.WINDOW_WIDTH//2 - self.header.get_width()//2, 50))
+            surface.fill((0, 0, 0))
+            header_idx = int(time.time()*3) % 3
+            header = self.nonseeker_headers[header_idx]
+            surface.blit(header, (c.WINDOW_WIDTH//2 - header.get_width()//2, c.WINDOW_HEIGHT//2 - header.get_height()//2))
+
+        black_showing = max(0, 1 - self.age, self.since_leave)
+        self.black.set_alpha(255*black_showing)
+        if self.black.get_alpha() > 1:
+            surface.blit(self.black, (0, 0))
 
     def receive_packet(self, packet):
         if packet.get("type") == "text_choice":
             self.game.active_text_key = packet.get("text")
-            self.done = True
+            self.leaving = True
 
     def next_frame(self):
         return MainGameplayFrame(self.game)
@@ -278,27 +358,32 @@ class MainGameplayFrame(Frame):
         self.answers = {}
         self.revealed = set()
         self.ammo = 3
+        self.starting_ammo = self.ammo
         self.seek_over = False
         self.moving_to_next_frame = False
         self.since_last_crosshairs_message = 0
 
     def draw_ammo(self, surface, offset = (0, 0)):
-        x = 10 + offset[0]
-        y = 10 + offset[1]
-        surf = pygame.Surface((10, 20))
-        surf.fill(c.YELLOW)
-        for i in range(self.ammo):
-            surface.blit(surf, (x, y))
-            x += 13
+        x = 20 + offset[0]
+        y = 20 + offset[1] - (1 - self.ammo_showing)**2*300
+        for i in range(self.starting_ammo):
+            if i < self.ammo:
+                surface.blit(self.bullet, (x, y))
+            else:
+                surface.blit(self.used_bullet, (x, y))
+            y += self.bullet.get_height() + 2
+
 
     def load(self):
         self.active_text_key = self.game.active_text_key
         self.display_text = TextsManager.get_text_from_key(self.active_text_key)
         self.word_collection = WordCollection(self.game, self, self.display_text)
 
-        button_surf = pygame.Surface((100, 50))
-        button_surf.fill((0, 255, 0))
-        self.lock_in_button = Button(button_surf, (c.WINDOW_WIDTH - 130, c.WINDOW_HEIGHT - 80), "Lock In", self.lock_in_clicked)
+        button_surf = pygame.Surface((160, 50))
+        button_surf.fill((84, 96, 60))
+        disabled_button = button_surf.copy()
+        disabled_button.set_alpha(80)
+        self.lock_in_button = Button(button_surf, (c.WINDOW_WIDTH - 130, c.WINDOW_HEIGHT - 80), "Lock In", self.lock_in_clicked, disabled_surf=disabled_button)
 
         self.hiding_timer = Timer(self.game)
         self.hiding_timer.position = Pose((c.WINDOW_WIDTH - 70, 70))
@@ -319,8 +404,21 @@ class MainGameplayFrame(Frame):
             self.word_collection.set_word_seeker_status(Word.SEEKER_HIDING_PHASE)
             self.lock_in_button.x = 50000
 
+        self.category_toast = CategoryToast(self.game, TextsManager.get_display_name_from_key(self.game.active_text_key), self.game.active_text_key)
+
+        self.lock_in_button_showing = 1
+        self.ammo_showing = 0
+
+        self.paper = ImageManager.load("images/paper.png")
+        self.bullet = ImageManager.load("images/bullet.png")
+        self.used_bullet = self.bullet.copy()
+        self.used_bullet.set_alpha(80)
+
+        self.bullet_impact = BulletImpact(self.game)
+
     def lock_in_clicked(self):
         if self.can_lock_in():
+            self.game.shake(7)
             self.word_collection.lock_in()
             self.lock_in_button.disable()
 
@@ -335,6 +433,8 @@ class MainGameplayFrame(Frame):
 
     def update(self, dt, events):
         self.age += dt
+        self.category_toast.update(dt, events)
+
         if self.all_players_locked_in:
             self.since_all_players_locked_in += dt
             if self.since_all_players_locked_in > 2 and not self.seeking_timer.started:
@@ -385,6 +485,26 @@ class MainGameplayFrame(Frame):
                     self.since_last_crosshairs_message = 0
                     self.give_seeker_hovering_update()
 
+        if self.since_all_players_locked_in < 1.5:
+            self.lock_in_button_showing += 3*dt
+            if self.lock_in_button_showing > 1:
+                self.lock_in_button_showing = 1
+        else:
+            self.lock_in_button_showing -= 3*dt
+            if self.lock_in_button_showing < 0:
+                self.lock_in_button_showing = 0
+
+        if self.since_all_players_locked_in > 3 and not self.review_timer.started:
+            self.ammo_showing += 3*dt
+            if self.ammo_showing > 1:
+                self.ammo_showing = 1
+        else:
+            self.ammo_showing -= 3*dt
+            if self.ammo_showing < 0:
+                self.ammo_showing = 0
+
+        self.bullet_impact.update(dt, events)
+
     def on_seeker_start(self):
         self.word_collection.lock_in(False)
         self.word_collection.deselect_all_words()
@@ -392,10 +512,10 @@ class MainGameplayFrame(Frame):
         self.word_collection.set_word_seeker_status(Word.SEEKER_SEEKING_PHASE)
 
     def draw(self, surface, offset=(0, 0)):
-        surface.fill((225, 220, 217))
+        surface.blit(self.paper, (0, 0))
 
         self.word_collection.draw(surface, offset)
-        self.lock_in_button.draw(surface, *offset)
+        self.lock_in_button.draw(surface, offset[0], offset[1] + 300*(1 - self.lock_in_button_showing)**2)
 
         if self.all_players_locked_in:
             self.draw_ammo(surface, offset)
@@ -406,7 +526,11 @@ class MainGameplayFrame(Frame):
         self.review_timer.draw(surface, offset)
 
         if not self.seek_over:
-            self.seeker_crosshairs.draw(surface, offset)
+            pass
+            #self.seeker_crosshairs.draw(surface, offset)
+
+        self.category_toast.draw(surface, offset)
+        self.bullet_impact.draw(surface, offset)
 
     def on_all_players_locked_in(self):
         self.all_players_locked_in = True
@@ -490,6 +614,11 @@ class MainGameplayFrame(Frame):
 
         if not self.ammo or not self.answers:
             self.end_seeker_mode()
+
+        if index in self.word_collection.word_index:
+            word = self.word_collection.word_index[index]
+            self.bullet_impact.impact_at(word.position.get_position())
+        self.game.shake(20)
 
     def seeker_guess_success(self, index):
         self.revealed.add(index)
