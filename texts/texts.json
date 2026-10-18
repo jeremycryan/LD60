@@ -81,8 +81,18 @@
   },
   {
     "display_name": "Famous Poems",
+    "name": "Where the Sidewalk Ends",
+    "text": "There is a place where the sidewalk ends\nand before the street begins,\nand there the grass grows soft and white,\nand there the sun burns crimson bright,\nand there the moon-bird rests from his flight\nto cool in the peppermint wind."
+  },
+  {
+    "display_name": "Famous Poems",
     "name": "The Road Not Taken",
-    "text": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth."
+    "text": "Two roads diverged in a yellow wood,\nAnd sorry I could not travel both\nAnd be one traveler, long I stood\nAnd looked down one as far as I could\nTo where it bent in the undergrowth.\nThen took the other, as just as fair,\nAnd having perhaps the better claim,\nBecause it was grassy and wanted wear;\nThough as for that the passing there\nHad worn them really about the same."
+  },
+  {
+    "display_name": "Famous Poems",
+    "name": "Woods on a Snowy Evening",
+    "text": "Whose woods these are I think I know.\nHis house is in the village though;\nHe will not see me stopping here\nTo watch his woods fill up with snow.\nMy little horse must think it queer\nTo stop without a farmhouse near\nBetween the woods and frozen lake\nThe darkest evening of the year."
   },
   {
     "display_name": "Famous Poems",
@@ -105,92 +115,92 @@
     "text": "Do not go gentle into that good night,\nOld age should burn and rave at close of day;\bRage, rage against the dying of the light.\nThough wise men at their end know dark is right,\nBecause their words had forked no lightning they\nDo not go gentle into that good night."
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Bohemian Rhapsody",
     "text": "Mama, just killed a man\nPut a gun against his head, pulled my trigger, now he's dead\nMama, life had just begun\nBut now I've gone and thrown it all away\nMama, ooh, didn't mean to make you cry\nIf I'm not back again this time tomorrow\nCarry on, carry on as if nothing really matters"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Yesterday",
     "text": "Yesterday\nAll my troubles seemed so far away\nNow it looks as though they're here to stay\nOh, I believe in yesterday\nSuddenly\nI'm not half the man I used to be\nThere's a shadow hangin' over me\nOh, yesterday came suddenly"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Let It Be",
     "text": "When I find myself in times of trouble, Mother Mary comes to me\nSpeaking words of wisdom, let it be\nAnd in my hour of darkness she is standing right in front of me\nSpeaking words of wisdom, let it be\nLet it be, let it be, let it be, let it be\nWhisper words of wisdom, let it be"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Baby",
     "text": "Baby, baby, baby, oh\nLike baby, baby, baby, no\nLike baby, baby, baby, oh\nI thought you'd always be mine, mine\nBaby, baby, baby, oh\nLike baby, baby, baby, no\nLike baby, baby, baby, oh\nI thought you'd always be mine, mine"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "The Boxer",
     "text": "I am just a poor boy\nThough my story's seldom told\nI have squandered my resistance\nFor a pocketful of mumbles\nSuch are promises\nAll lies and jest\nStill, a man hears what he wants to hear\nAnd disregards the rest"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Blank Space",
     "text": "So it's gonna be forever\nOr it's gonna go down in flames\nYou can tell me when it's over,\nIf the high was worth the pain\nGot a long list of ex-lovers\nThey'll tell you I'm insane\n'Cause you know I love the players\nAnd you love the game"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Crazy Train",
     "text": "Crazy, but that's how it goes\nMillions of people living as foes\nMaybe it's not too late\nTo learn how to love\nAnd forget how to hate\nMental wounds not healing\nLife's a bitter shame\nI'm going off the rails on a crazy train\nI'm going off the rails on a crazy train\n"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "I Will Always Love You",
     "text": "If I should stay\nI would only be in your way\nSo I'll go, but I know\nI'll think of you each step of the way\nAnd I will always love you\nI will always love you"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Don't Stop Believin'",
     "text": "Just a small-town girl, livin' in a lonely world\nShe took the midnight train goin' anywhere\nJust a city boy, born and raised in South Detroit\nHe took the midnight train goin' anywhere\nA singer in a smoky room\nThe smell of wine and cheap perfume\nFor a smile, they can share the night\nIt goes on and on and on and on"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Africa",
-    "text": "I hear the drums echoing tonight\nBut she hears only whispers of some quiet conversation\nShe's coming in, twelve-thirty flight\nThe moonlit wings reflect the stars that guide me towards salvation\nI stopped an old man along the way\nHoping to find some old forgotten words or ancient melodies\nHe turned to me as if to say, \"Hurry boy, it's waiting there for you\""
+    "text": "I hear the drums echoing tonight\nBut she hears only whispers of some quiet conversation\nShe's coming in, twelve-thirty flight\nThe moonlit wings reflect the stars\nThat guide me towards salvation\nI stopped an old man along the way\nHoping to find some old forgotten words or ancient melodies\nHe turned to me as if to say,\n\"Hurry boy, it's waiting there for you\""
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Mr. Jones",
     "text": "I was down at the New Amsterdam\nStaring at this yellow-haired girl\nMr. Jones strikes up a conversation\nWith a black-haired flamenco dancer\nYou know, she dances while his father plays guitar\nShe's suddenly beautiful\nAnd we all want something beautiful\nMan, I wish I was beautiful"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Fireflies",
     "text": "You would not believe your eyes if ten million fireflies\nLit up the world as I fell asleep\n'Cause they'd fill the open air and leave teardrops everywhere\nYou'd think me rude, but I would just stand and stare\nI'd like to make myself believe\nThat planet Earth turns slowly\nIt's hard to say that I'd rather stay awake when I'm asleep\n'Cause everything is never as it seems"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Billie Jean",
     "text": "She was more like a beauty queen from a movie scene\nI said, \"Don't mind, but what do you mean, I am the one\nWho will dance on the floor in the round?\"\nShe said I am the one\nWho will dance on the floor in the round\nShe told me her name was Billie Jean as she caused a scene\nThen every head turned with eyes that dreamed of bein' the one\nWho will dance on the floor in the round"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Fly Me To The Moon",
     "text": "Fly me to the moon\nLet me play among the stars\nLet me see what spring is like\nOn Jupiter and Mars\nIn other words, hold my hand\nIn other words, baby, kiss me"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Toxic",
     "text": "Too high, can't come down\nLosin' my head, spinnin' 'round and 'round\nDo you feel me now?\nWith the taste of your lips, I'm on a ride\nYou're toxic, I'm slippin' under\nWith a taste of the poison, paradise\nI'm addicted to you, don't you know that you're toxic?\nAnd I love what you do, don't you know that you're toxic?"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Call Me Maybe",
     "text": "I threw a wish in the well\nDon't ask me, I'll never tell\nI looked to you as it fell\nAnd now you're in my way\nI trade my soul for a wish\nPennies and dimes for a kiss\nI wasn't lookin' for this\nBut now you're in my way"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "Every Breath You Take",
     "text": "Every breath you take, and every move you make\nEvery bond you break, every step you take\nI'll be watching you\nEvery single day, and every word you say\nEvery game you play, every night you stay\nI'll be watching you"
   },
   {
-    "display_name": "Famous Song Lyrics",
+    "display_name": "Song Lyrics",
     "name": "You Are My Sunshine",
     "text": "You are my sunshine\nMy only sunshine\nYou make me happy\nWhen skies are gray\nYou'll never know, dear\nHow much I love you\nPlease don't take\nMy sunshine away"
   },
@@ -250,8 +260,118 @@
     "text": "Now, before we takeoff, be sure your seat is upright, your armrests are lowered, your tray table is put away and all carry-on items are properly stowed. And finally now, it'd be a good time for everyone to review the Safety information card which is in your seat pocket. On behalf of everyone at Delta Airlines, we want to thank you for paying attention. Now, as we prepare for takeoff, please relax and enjoy your flight."
   },
   {
-    "display_name": "Software",
-    "name": "MIT License",
-    "text": "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+    "display_name": "Song Lyrics",
+    "name": "Y.M.C.A.",
+    "text": "Young man, there's no need to feel down, I said\nYoung man, pick yourself off the ground, I said\nYoung man, 'cause you're in a new town\nThere's no need to be unhappy\nYoung man, there's a place you can go, I said\nYoung man, when you're short on your dough you can\nStay there and I'm sure you will find\nMany ways to have a good time"
+  },
+  {
+    "display_name": "Song Lyrics",
+    "name": "All Star",
+    "text": "Well, the years start comin' and they don't stop comin'\nFed to the rules and I hit the ground runnin'\nDidn't make sense not to live for fun\nYour brain gets smart, but your head gets dumb\nSo much to do, so much to see\nSo, what's wrong with taking the backstreets?\nYou'll never know if you don't go\nYou'll never shine if you don't glow"
+  },
+  {
+    "display_name": "Song Lyrics",
+    "name": "We Didn't Start the Fire",
+    "text": "Harry Truman, Doris Day, Red China, Johnnie Ray\nSouth Pacific, Walter Winchell, Joe DiMaggio\nJoe McCarthy, Richard Nixon, Studebaker, television\nNorth Korea, South Korea, Marilyn Monroe\nRosenbergs, H-Bomb, Sugar Ray, Panmunjom\nBrando, The King and I, And The Catcher in the Rye\nEisenhower, vaccine, England's got a new queen\nMarciano, Liberace\nSantayana goodbye"
+  },
+  {
+    "display_name": "Song Lyrics",
+    "name": "American Pie",
+    "text": "A long, long time ago\nI can still remember how that music used to make me smile\nAnd I knew if I had my chance\nThat I could make those people dance\nAnd maybe they'd be happy for a while\nBut February made me shiver\nWith every paper I'd deliver\nBad news on the doorstep\nI couldn't take one more step"
+  },
+  {
+    "display_name": "Song Lyrics",
+    "name": "I'm Still Standing",
+    "text": "You could never know what it's like\nYour blood, like winter, freezes just like ice\nAnd there's a cold, lonely light that shines from you\nYou'll wind up like the wreck you hide behind that mask you use\nAnd did you think this fool could never win?\nWell, look at me, I'm a-comin' back again\nI got a taste of love in a simple way\nAnd if you need to know while I'm still standin', you just fade away"
+  },
+  {
+    "display_name": "Song Lyrics",
+    "name": "American Pie",
+    "text": "A long, long time ago\nI can still remember how that music used to make me smile\nAnd I knew if I had my chance\nThat I could make those people dance\nAnd maybe they'd be happy for a while\nBut February made me shiver\nWith every paper I'd deliver\nBad news on the doorstep\nI couldn't take one more step"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Mamma Mia",
+    "text": "I've been cheated by you since I don't know when\nSo I made up my mind, it must come to an end\nLook at me now, will I ever learn?\nI don't know how, but I suddenly lose control\nThere's a fire within my soul\nJust one look and I can hear a bell ring\nOne more look and I forget everything, whoa"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Alexander Hamilton",
+    "text": "How does a bastard, orphan, son of a whore and a\nScotsman, dropped in the middle of a forgotten\nSpot in the Caribbean by Providence, impoverished in squalor\nGrow up to be a hero and a scholar?\nThe ten-dollar Founding Father without a father\nGot a lot farther by working a lot harder\nBy being a lot smarter, by being a self-starter\nBy fourteen, they placed him in charge of a trading charter"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Do You Hear the People Sing?",
+    "text": "Then join in the fight\nThat will give you the right to be free!\nDo you hear the people sing?\nSinging the song of angry men?\nIt is the music of the people\nWho will not be slaves again!\nWhen the beating of your heart\nEchoes the beating of the drums\nThere is a life about to start\nWhen tomorrow comes!"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "The Circle of Life",
+    "text": "From the day we arrive on the planet\nAnd, blinking, step into the sun\nThere's more to see than can ever be seen\nMore to do than can ever be done\nThere's far too much to take in here\nMore to find than can ever be found\nBut the sun rolling high\nThrough the sapphire sky\nKeeps great and small on the endless round"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Dancing Through Life",
+    "text": "Dancing through life, skimming the surface\nGliding where turf is smooth\nLife's more painless for the brainless\nWhy think too hard when it's so soothing?\nDancing through life, no need to tough it\nWhen you can slough it off as I do\nNothing matters but knowing nothing matters\nIt's just life, so keep dancing through"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Defying Gravity",
+    "text": "Too late for second-guessing\nToo late to go back to sleep\nIt's time to trust my instincts\nClose my eyes and leap\nIt's time to try defying gravity\nI think I'll try defying gravity\nKiss me goodbye, I'm defying gravity\nAnd you won't bring me down"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "My Favorite Things",
+    "text": "Raindrops on roses and whiskers on kittens\nBright copper kettles and warm woolen mittens\nBrown paper packages tied up with strings\nThese are a few of my favorite things\nCream-colored ponies and crisp apple strudels\nDoorbells and sleigh bells and schnitzel with noodles\nWild geese that fly with the moon on their wings\nThese are a few of my favorite things"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Somewhere Over the Rainbow",
+    "text": "Someday I'll wish upon a star\nAnd wake up where the clouds are far behind me\nWhere troubles melt like lemon drops\nAway above the chimney tops\nThat's where you'll find me\nSomewhere over the rainbow\nBluebirds fly\nBirds fly over the rainbow\nWhy, then, oh, why can't I?"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Pure Imagination",
+    "text": "Come with me and you'll be\nIn a world of pure imagination\nTake a look and you'll see\nInto your imagination\nWe'll begin with a spin\nTraveling in the world of my creation\nWhat we'll see will defy\nExplanation"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Memory",
+    "text": "Memory\nTurn your face to the moonlight\nLet your memory lead you\nOpen up enter in\nIf you find there\nThe meaning of what happiness is\nThen a new life will begin"
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "Singin' in the Rain",
+    "text": "I'm singin' in the rain\nJust singin' in the rain,\nWhat a glorious feeling,\nAnd I'm happy again.\nI'm laughing at clouds\nSo dark, up above,\nThe sun's in my heart\nAnd I'm ready for love."
+  },
+  {
+    "display_name": "Musical Numbers",
+    "name": "White Christmas",
+    "text": "I'm dreaming of a white Christmas\nJust like the ones I used to know\nWhere the treetops glisten and children listen\nTo hear sleigh bells in the snow\nI'm dreaming of a white Christmas\nWith every Christmas card I write\nMay your days be merry and bright\nAnd may all your Christmases be white"
+  },
+  {
+    "display_name": "Historical Speeches",
+    "name": "FDR Inauguration",
+    "text": "So, first of all, let me assert my firm belief that the only thing we have to fear is fear itself: nameless, unreasoning, unjustified terror which paralyzes needed efforts to convert retreat into advance."
+  },
+  {
+    "display_name": "Historical Speeches",
+    "name": "Tear Down This Wall",
+    "text": "General Secretary Gorbachev, if you seek peace, if you seek prosperity for the Soviet Union and Eastern Europe, if you seek liberalization: Come here to this gate! Mr. Gorbachev, open this gate! Mr. Gorbachev, tear down this wall!"
+  },
+  {
+    "display_name": "Historical Speeches",
+    "name": "I Have a Dream",
+    "text": "I have a dream that one day this nation will rise up and live out the true meaning of its creed: \"We hold these truths to be self-evident, that all men are created equal.\" I have a dream that one day on the red hills of Georgia, the sons of former slaves and the sons of former slave owners will be able to sit down together at the table of brotherhood."
+  },
+  {
+    "display_name": "Historical Speeches",
+    "name": "Gettysburg Address",
+    "text": "Four score and seven years ago our fathers brought forth on this continent a new nation, conceived in liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure."
+  },
+  {
+    "display_name": "Historical Speeches",
+    "name": "We Shall Fight on the Beaches",
+    "text": "We shall go on to the end, we shall fight in France, we shall fight on the seas and oceans, we shall fight with growing confidence and growing strength in the air, we shall defend our Island, whatever the cost may be, we shall fight on the beaches, we shall fight on the landing grounds, we shall fight in the fields and in the streets, we shall fight in the hills; we shall never surrender."
   }
 ]

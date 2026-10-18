@@ -6,6 +6,7 @@ from word import Word
 
 class TextField(GameObject):
     WIDTH = 125
+    CHAR_LIMIT = 4
 
     def __init__(self, game):
         super().__init__(game)
@@ -13,6 +14,14 @@ class TextField(GameObject):
         self.text = ""
         self.regenerate_text_surface()
         self.state = Word.DEFAULT
+
+    def set_width(self, width):
+        self.WIDTH = width
+        self.regenerate_text_surface()
+
+    def set_char_limit(self, char_limit):
+        self.CHAR_LIMIT = char_limit
+        self.regenerate_text_surface()
 
     def update(self, dt, events):
         hovered = self.mouse_in_rect()
@@ -41,7 +50,7 @@ class TextField(GameObject):
                 self.text = "" if len(self.text) <= 1 else self.text[:-1]
                 modified = True
             else:
-                if character in " " or len(self.text) >= 4:
+                if character in " " or len(self.text) >= self.CHAR_LIMIT:
                     pass
                 else:
                     self.text += character
@@ -68,7 +77,7 @@ class TextField(GameObject):
         if self.text:
             self.surf = self.game.type_code_font.render(self.text, True, (255, 255, 255))
         else:
-            self.surf = self.game.type_code_font.render("XXXX", True, (76, 69, 60))
+            self.surf = self.game.type_code_font.render("X"*self.CHAR_LIMIT, True, (76, 69, 60))
 
     def draw(self, surf, offset=(0, 0)):
         x = self.position.x + offset[0]

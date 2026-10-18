@@ -1,5 +1,6 @@
 import math
 import platform
+import random
 
 import pygame
 
@@ -27,7 +28,7 @@ class Game:
 
         self.active_text_key = "Smoking"
         self.category_options = ["Smoking"]
-        self.word_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 28)
+        self.word_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
         self.type_code_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 36)
         self.toast_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 60)
         self.player_list_font = pygame.font.Font("fonts/ELEGANT TYPEWRITER Regular.ttf", 24)
@@ -51,6 +52,9 @@ class Game:
         self.active_room = ""
         self.active_client_id = -1
         self.is_seeker = False
+        self.username = "".join([random.choice(c.CONSONANTS) for _ in range(10)])
+        self.username_dict = {}
+        self.current_players = []
 
         self.sprocket = None
 
@@ -106,7 +110,7 @@ class Game:
 
     async def main_inner(self):
         await self.initialize_sprocket()
-        current_frame = f.MainMenu(self)
+        current_frame = f.NameFrame(self)
         current_frame.load()
         self.clock.tick(60)
 

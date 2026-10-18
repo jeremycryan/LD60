@@ -22,6 +22,7 @@ class Server:
             self.selected_words = {}
             self.locked_in_words = {}
             self.hiding_timed_out_clients = set()
+            self.client_usernames = {}
 
         def on_round_start(self):
             self.clear_word_state()
@@ -33,11 +34,14 @@ class Server:
             self.clear_word_state()
             random.shuffle(self.clients)
 
-        def add_client(self, client):
+        def add_client(self, client, username=""):
             self.clients.append(client)
+            self.client_usernames[client] = username
 
         def remove_client(self, client):
             self.clients.remove(client)
+            if client in self.client_usernames:
+                self.client_usernames.pop(client)
 
         def time_out_client(self, client):
             self.hiding_timed_out_clients.add(client)
@@ -119,14 +123,15 @@ class Server:
         if packet.get("type") == "new_room":
             if client not in self.client_id_to_room:
                 room = self.create_new_room()
-                self.add_client_to_room(client, room.join_code)
+                self.add_client_to_room(client, room.join_code, username=packet.get("username"))
                 self.servo.send(client, type="new_room_success", code=room.join_code)
                 self.send_room_list(room.join_code)
             else:
                 self.servo.send(client, type="new_room_fail")
         if packet.get("type") == "join_room":
             code = packet.get("code")
-            if self.add_client_to_room(client, code):
+            username = packet.get("username")
+            if self.add_client_to_room(client, code, username=username):
                 self.servo.send(client, type="join_room_success", code=code)
                 self.send_room_list(code)
             else:
@@ -144,7 +149,8 @@ class Server:
                 room.state = Server.Room.STATE_PLAYING # TODO go to selection first
                 room.on_game_start()
                 room.on_round_start()
-                self.send_to_all_clients_in_room(room_code, Packet(type="category_options", texts=TextsManager.get_random_keys_no_overlap(3), seeker=room.seeker))
+                texts = TextsManager.get_random_keys_no_overlap(3)
+                self.send_to_all_clients_in_room(room_code, Packet(type="category_options", texts=texts, seeker=room.seeker))
                 self.send_to_all_clients_in_room(room_code, Packet(type="start_game", seeker=room.seeker))
         if packet.get("type") == "leave_room":
             self.handle_disconnect(client)
@@ -184,8 +190,9 @@ class Server:
             if room.state != Server.Room.STATE_SELECTING_TEXT:
                 room.state = Server.Room.STATE_SELECTING_TEXT
                 room.on_round_start()
+                texts = TextsManager.get_random_keys_no_overlap(3)
                 self.send_to_all_clients_in_room(room_code, Packet(type="category_options",
-                                                                   texts=TextsManager.get_random_keys_no_overlap(3),
+                                                                   texts=texts,
                                                                    seeker=room.seeker))
         if packet.get("type") == "seeker_hover":
             self.send_to_all_clients_in_room_but(room_code, Packet(type="seeker_hover", word=packet.get("word")), client)
@@ -200,7 +207,9 @@ class Server:
     def send_room_list(self, room_code):
         if room_code not in self.rooms:
             return
-        packet = Packet(type="room_list", clients=self.rooms[room_code].clients)
+        usernames = self.rooms[room_code].client_usernames
+        print(f"Usernames: {usernames}")
+        packet = Packet(type="room_list", clients=self.rooms[room_code].clients, usernames=usernames)
         self.send_to_all_clients_in_room(room_code, packet)
 
     def send_client_disconnect(self, room_code, client):
@@ -223,16 +232,18 @@ class Server:
                 continue
             self.servo.send(client, **packet.__dict__)
 
-    def add_client_to_room(self, client_id, room_code):
+    def add_client_to_room(self, client_id, room_code, username=""):
         if client_id in self.client_id_to_room:
             return False
         if room_code not in self.rooms:
             return False
+        if username is None:
+            username = ""
         room = self.rooms[room_code]
         if room.state != Server.Room.STATE_LOBBY:
             return False # Can't late join
         self.client_id_to_room[client_id] = room_code
-        self.rooms[room_code].add_client(client_id)
+        self.rooms[room_code].add_client(client_id, username=username)
         return True
 
     def new_join_code(self):

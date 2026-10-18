@@ -5,7 +5,7 @@ import constants as c
 
 
 class Word(GameObject):
-    PUNCTUATION = ".,;!?-():'\"[]"
+    PUNCTUATION = ".,;!?-():\"[]"
 
     DEFAULT = 0
     HOVERED = 1
@@ -39,12 +39,29 @@ class Word(GameObject):
         self.revealed = False
         self.found = False
         self.unfound = False
+        self.answer_surf = pygame.Surface((1, 1))
+        self.showing_answer = False
+        self.owner = -1
 
     def has_been_changed(self):
         return self.inner_text.lower().strip() != self.modified_inner_text.lower().strip()
 
+    def is_too_similar(self):
+        old = self.inner_text.lower().strip(self.PUNCTUATION)
+        new = self.modified_inner_text.lower().strip(self.PUNCTUATION)
+        if len(old) != len(new):
+            return False
+        for i, char in enumerate(old):
+            if char == new[i]:
+                continue
+            if char == "'" or new[i] == "'":  # Count apostrophes as character reeplacements
+                continue
+            return False
+        return True
+
+
     def word_valid(self):
-        return self.modified_inner_text != "" and self.has_been_changed()
+        return self.modified_inner_text != "" and self.has_been_changed() and not self.is_too_similar()
 
     def set_index(self, idx):
         self.index = idx
@@ -103,7 +120,8 @@ class Word(GameObject):
         self.state = new_state
 
     def update(self, dt, events):
-        hovered = self.mouse_in_rect() and not self.locked_in and not self.seeker_state == self.SEEK_OVER
+        mouse_in_rect = self.mouse_in_rect()
+        hovered = mouse_in_rect and not self.locked_in and not self.seeker_state == self.SEEK_OVER
         if self.state == self.DEFAULT:
             if hovered:
                 self.update_state(self.HOVERED)
@@ -121,6 +139,32 @@ class Word(GameObject):
                 self.on_keypress(event)
 
         self.update_position(dt)
+
+        if self.frame.seek_over and self.frame.review_timer.started and mouse_in_rect:
+            self.show_answer()
+        else:
+            self.hide_answer()
+
+    def show_answer(self):
+        if not self.has_been_changed() and self.index not in self.frame.found_words:
+            return
+
+        original_text = self.inner_text
+        new_text = self.modified_inner_text
+
+        if self.index in self.frame.found_words:
+            new_text = self.frame.found_words[self.index]
+
+        text = f"{self.owner_username()}:\n{original_text} -> {new_text}"
+        self.game.web_log(f"Answer: " + text)
+        text_surf = self.game.word_font.render(text,True,(255, 255, 255))
+        self.answer_surf = pygame.Surface((text_surf.get_width() + 12, text_surf.get_height() + 12))
+        self.answer_surf.fill((80, 80, 80))
+        self.answer_surf.blit(text_surf, (6, 6))
+        self.showing_answer = True
+
+    def hide_answer(self):
+        self.showing_answer = False
 
     def update_position(self, dt):
         diff = self.target_position - self.position
@@ -150,6 +194,11 @@ class Word(GameObject):
                 self.collection.recalculate_word_splitting_behavior()
                 self.collection.update_word_target_positions()
 
+            if self.word_valid():
+                self.frame.lock_in_button.enable()
+            else:
+                self.frame.lock_in_button.disable()
+
     def on_click_seeker(self):
         if self.seeker_state == Word.SEEKER_HIDING_PHASE or self.seeker_state == Word.SEEK_OVER:
             return
@@ -166,6 +215,10 @@ class Word(GameObject):
         if self.seeker_state == Word.HIDER:
             if self.state == self.DEFAULT or self.state == self.HOVERED:
                 self.update_state(self.SELECTED)
+                if self.word_valid():
+                    self.frame.lock_in_button.enable()
+                else:
+                    self.frame.lock_in_button.disable()
         else:
             self.on_click_seeker()
 
@@ -198,6 +251,11 @@ class Word(GameObject):
         if not self.state in [self.DEFAULT, self.DISABLED, self.SELECTED]:
             pygame.draw.rect(surf, rect_color, (x - c.WORD_HOVER_MARGIN, y - c.WORD_HOVER_MARGIN, self.width() + 2*c.WORD_HOVER_MARGIN, self.height() + 2*c.WORD_HOVER_MARGIN), width=2)
 
+        if self.showing_answer:
+            x = self.position.x + offset[0] - self.answer_surf.get_width()//2
+            y = self.position.y + offset[1] - 25 - self.answer_surf.get_height()
+            surf.blit(self.answer_surf, (x, y))
+
     def force_default_state(self):
         self.state = Word.DEFAULT
 
@@ -229,3 +287,9 @@ class Word(GameObject):
     def on_select_new_word(self):
         if self.game.sprocket:
             self.game.sprocket.send(type="select_word", word=self.index)
+
+    def owner_username(self):
+        if self.owner in self.game.username_dict:
+            return self.game.username_dict[self.owner]
+        else:
+            return f"Player {self.owner}"
