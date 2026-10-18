@@ -52,6 +52,7 @@ class Game:
         self.active_room = ""
         self.active_client_id = -1
         self.is_seeker = False
+        self.seeker = -1
         self.username = "".join([random.choice(c.CONSONANTS) for _ in range(10)])
         self.username_dict = {}
         self.current_players = []
@@ -71,6 +72,11 @@ class Game:
 
         self.key_sounds = [SoundManager.load(f"audio/key_{n+2}.ogg") for n in range(3)]
         self.ding = SoundManager.load("audio/ding.ogg")
+        self.gunshot_high = SoundManager.load("audio/gunshot.ogg")
+        self.gunshot_high.set_volume(0.5)
+        self.gunshot = SoundManager.load("audio/gunshot_low.ogg")
+        self.gunshot.set_volume(0.3)
+        self.ding.set_volume(0.5)
 
         pygame.display.set_caption(f"{c.CAPTION}")
 

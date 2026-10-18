@@ -22,9 +22,11 @@ class CategoryToast(GameObject):
         self.white.fill(c.WHITE)
 
     def update_text_surf(self):
-        shown_characters = int((self.through_middle() * 2) * len(self.text_name))
+        shown_characters = min(int((self.through_middle() * 2) * len(self.text_name)), len(self.text_name))
         if shown_characters != self.shown_characters:
             self.text_surf = self.game.toast_font.render(self.text_name[:shown_characters], True, (0, 0, 0))
+            self.game.play_key_sound()
+            self.shown_characters = shown_characters
 
     def update(self, dt, events):
         self.age += dt

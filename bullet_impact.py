@@ -37,3 +37,4 @@ class BulletImpact(GameObject):
         self.position = Pose(xy)
         self.frame_count = 0
         self.since_shot = 0
+        self.game.gunshot.play()

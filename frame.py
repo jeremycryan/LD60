@@ -371,6 +371,7 @@ class RoomFrame(Frame):
                 self.game.is_seeker = True
             else:
                 self.game.is_seeker = False
+            self.game.seeker = int(packet.get("seeker"))
             self.leaving = True
         if packet.get("type") == "text_choice":
             self.game.active_text_key = packet.get("text")
@@ -381,6 +382,7 @@ class RoomFrame(Frame):
                 self.game.is_seeker = True
             else:
                 self.game.is_seeker = False
+            self.game.seeker = int(packet.get("seeker"))
         if packet.get("type") == "room_list":
             self.game.current_players = packet.get("clients")
             self.game.username_dict = packet.get("usernames")
@@ -402,7 +404,12 @@ class CategorySelectFrame(Frame):
 
     def load(self):
         self.header = self.game.category_header_font.render("You're seeking next.\n Choose a category.", True, (101, 99, 127), )
-        self.nonseeker_headers = [self.game.player_list_font.render("Waiting for seeker to\n  choose a category." + "."* i, True, (200, 200, 200)) for i in range(3)]
+        seeker_num = self.game.seeker
+        if seeker_num in self.game.username_dict:
+            seeker_name = self.game.username_dict[seeker_num]
+        else:
+            seeker_name = f"Player {seeker_num}"
+        self.nonseeker_headers = [self.game.player_list_font.render(f"Waiting for {seeker_name} to choose a category." + ("."* i), True, (200, 200, 200)) for i in range(3)]
 
         self.buttons = []
         x = c.WINDOW_WIDTH//2
@@ -555,6 +562,7 @@ class MainGameplayFrame(Frame):
             self.game.shake(7)
             self.word_collection.lock_in()
             self.lock_in_button.disable()
+            self.game.ding.play()
 
     def can_lock_in(self):
         if not self.word_collection.can_lock_in():
@@ -747,6 +755,7 @@ class MainGameplayFrame(Frame):
                 self.game.is_seeker = True
             else:
                 self.game.is_seeker = False
+            self.game.seeker = int(packet.get("seeker"))
             self.done = True
 
     def seeker_guess(self, index):
