@@ -577,6 +577,9 @@ class MainGameplayFrame(Frame):
         self.lock_in_button.enable()
 
     def update(self, dt, events):
+        if self.done:
+            return
+        
         self.age += dt
         self.category_toast.update(dt, events)
         self.message_toast.update(dt, events)
