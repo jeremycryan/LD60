@@ -561,6 +561,8 @@ class MainGameplayFrame(Frame):
 
         self.message_toast = MessageToast(self.game)
 
+        self.was_seeker_at_start = self.game.is_seeker
+
     def lock_in_clicked(self):
         if self.can_lock_in():
             self.game.shake(7)
@@ -605,7 +607,7 @@ class MainGameplayFrame(Frame):
             self.game.hiding_music.play()
 
 
-        if self.hiding_timer.has_run_out() and not self.hiding_timer_run_out_flag and not self.game.is_seeker:
+        if self.hiding_timer.has_run_out() and not self.hiding_timer_run_out_flag and not self.was_seeker_at_start:
             if self.can_lock_in() and self.lock_in_button.enabled:
                 self.lock_in_clicked()
             elif not self.word_collection.locked_in:
