@@ -166,7 +166,7 @@ class Server:
                 if room.all_players_locked_in():
                     self.send_all_players_locked_in(room_code)
             else:
-                client.send_packet(type="lock_in_word_fail")
+                self.servo.send(client, type="lock_in_word_fail")
         if packet.get("type") == "select_word":
             if room.set_selected_word(client, packet.get("word")):
                 self.send_to_all_clients_in_room(room_code,
@@ -175,7 +175,7 @@ class Server:
                                                         client_id=client),
                                                  )
             else:
-                client.send_packet(type="select_word_fail")
+                self.servo.send(client, type="select_word_fail")
         if packet.get("type") == "hiding_timeout":
             room.time_out_client(client)
             self.send_to_all_clients_in_room_but(room_code, Packet(type="hiding_timeout", client=client), client)

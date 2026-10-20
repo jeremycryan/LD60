@@ -496,6 +496,7 @@ class MainGameplayFrame(Frame):
         self.since_seek_over = 0
         self.moving_to_next_frame = False
         self.since_last_crosshairs_message = 0
+        self.skip_category_select = False
 
     def draw_ammo(self, surface, offset = (0, 0)):
         x = 20 + offset[0]
@@ -764,6 +765,11 @@ class MainGameplayFrame(Frame):
             self.game.seeker = int(packet.get("seeker"))
             self.done = True
 
+        if packet.get("type") == "text_choice" and self.seek_over:
+            self.game.active_text_key = packet.get("text")
+            self.done = True
+            self.skip_category_select = True
+
     def seeker_guess(self, index):
         if index in self.revealed:
             return
@@ -784,7 +790,9 @@ class MainGameplayFrame(Frame):
 
                 if word.owner in self.game.username_dict:
                     found_name = self.game.username_dict[word.owner]
-                    self.message_toast.add_message(f"{self.game.username} FOUND {found_name}!")
+                    if self.game.seeker in self.game.username_dict:
+                        seeker_name = self.game.username_dict[self.game.seeker]
+                        self.message_toast.add_message(f"{seeker_name} FOUND {found_name}!")
             self.seeker_guess_success(index)
             self.answers.pop(found)
         else:
@@ -833,6 +841,8 @@ class MainGameplayFrame(Frame):
             word.regenerate_text_surface()
 
     def next_frame(self):
+        if self.skip_category_select:
+            return MainGameplayFrame(self.game)
         return CategorySelectFrame(self.game)
 
     def on_seeker_hover(self, word_idx):
